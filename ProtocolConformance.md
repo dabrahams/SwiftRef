@@ -1,12 +1,12 @@
 # 1 Protocol Conformance
 
->***Protocol Witness*** - Given a type `t` [declared to conform to
->protocol](#11-declaration-of-protocol-conformance) `p` and a protocol
->requirement `m` of `p`, the [protocol witness](#12-protocol-witness) for `m` is
+>***Protocol Witness*** - Given a type `T` [declared to conform to
+>protocol](#11-declaration-of-protocol-conformance) `P` and a protocol
+>requirement `m` of `P`, the [protocol witness](#12-protocol-witness) for `m` is
 >the implementation that is the [most
 >specialized](#14-most-specialized-implementation) of the [unconditionally
 >accessible implementations](#13-unconditionally-accessible-implementations) of
->`m` on `t`, as determined in the scope in which the declaration `t: p` is
+>`m` on `T`, as determined in the scope in which the declaration `T: P` is
 >stated.
 
 When a type is declared to conform to a protocol, a set of
@@ -15,44 +15,44 @@ requirement of the protocol.  This document specifies how Swift determines the
 set of protocol witnesses for a protocol conformance.
 
 ## 1.1 Declaration of Protocol Conformance
-For a type `t` to conform to a protocol `p`, `t` must be declared to conform to
-`p`, and `t` must have at least one unconditionally accessible implementation
-for each protocol requirement of `p`.  A distinct set of protocol witnesses is
-established for the conformance `t: p`.
+For a type `T` to conform to a protocol `P`, `T` must be declared to conform to
+`P`, and `T` must have at least one unconditionally accessible implementation
+for each protocol requirement of `P`.  A distinct set of protocol witnesses is
+established for the conformance `T: P`.
 
-A declaration that `t` conforms to `p` further constitutes, with respect to each
-protocol `o`*<sub>i</sub>* from which `p` directly or indirectly inherits, a
-declaration that `t` conforms to `o`*<sub>i</sub>* so long as `t` has not
+A declaration that `T` conforms to `P` further constitutes, with respect to each
+protocol `o`*<sub>i</sub>* from which `P` directly or indirectly inherits, a
+declaration that `T` conforms to `o`*<sub>i</sub>* so long as `T` has not
 already been declared to conform to `o`*<sub>i</sub>*.  Thus, for the
-declaration of `t: p` to be valid, the declarations of each `t: o`*<sub>i</sub>*
-must satisfy the requirement that `t` have at least one unconditionally
+declaration of `T: P` to be valid, the declarations of each `T: o`*<sub>i</sub>*
+must satisfy the requirement that `T` have at least one unconditionally
 accessible implementation for each protocol requirement of
-`o`*<sub>i</sub>*. For each conformance `t: o`*<sub>i</sub>*, a distinct set of
+`o`*<sub>i</sub>*. For each conformance `T: o`*<sub>i</sub>*, a distinct set of
 protocol witnesses is established.
 
-In a given scope, a type can conform to a protocol in only one way.  A type `t`
-cannot be declared to conform to a protocol `p` if, within the visible scope,
-another declaration exists of `t: p`.  This rule holds true even where competing
+In a given scope, a type can conform to a protocol in only one way.  A type `T`
+cannot be declared to conform to a protocol `P` if, within the visible scope,
+another declaration exists of `T: P`.  This rule holds true even where competing
 declarations are conditional with disjoint conditions.
 
 ## 1.2 Protocol Witness
 
-Given the declaration of conformance `t: p`, a *protocol requirement* `m` is a
-statement in the declaration of `p` that `t` (or any other type seeking to
-conform to `p`) must have a member satisfying the requirements of `m`.  A member
-of `t` that satisfies the requirements of `m` is referred to as an
+Given the declaration of conformance `T: P`, a *protocol requirement* `m` is a
+statement in the declaration of `P` that `T` (or any other type seeking to
+conform to `P`) must have a member satisfying the requirements of `m`.  A member
+of `T` that satisfies the requirements of `m` is referred to as an
 *implementation* of `m`.
 
-Given `t: p` and a protocol requirement `m` of `p`, one and only one of `t`'s
+Given `T: P` and a protocol requirement `m` of `P`, one and only one of `T`'s
 implementations of `m` will actually be used as the implementation of `m`.  Such
 implementation of `m` is referred to as the *protocol witness* for the `m`
-requirement of the conformance `t: p`.
+requirement of the conformance `T: P`.
 
 The protocol witness for `m` is the implementation that is the *most
-specialized* of the *unconditionally accessible* implementations of `m` on `t`,
-as determined in the scope in which the declaration `t: p` is stated.  If `t`
+specialized* of the *unconditionally accessible* implementations of `m` on `T`,
+as determined in the scope in which the declaration `T: P` is stated.  If `T`
 has only one unconditionally accessible implementation of `m`, that
-implementation will be the protocol witness.  If `t` has more than one
+implementation will be the protocol witness.  If `T` has more than one
 unconditionally accessible implementation of `m`, the most specialized of those
 implementations will be the protocol witness.
 
@@ -67,12 +67,12 @@ intended witness for a given requirement.
 A type's possible implementation of a protocol requirement is available to serve
 as the protocol witness for the requirement only if the implementation is an
 *unconditionally accessible* member of the type in the scope in which the
-protocol conformance is declared.  Given a declaration of `t: p` and an
-implementation of a protocol requirement `m` of `p`, the implementation is
-*unconditionally accessible* if and only if (i) `t` satisfies the conditions, if
+protocol conformance is declared.  Given a declaration of `T: P` and an
+implementation of a protocol requirement `m` of `P`, the implementation is
+*unconditionally accessible* if and only if (i) `T` satisfies the conditions, if
 any, to which the declaration of the implementation is subject, and (ii) per the
-rules of access control, the implementation is visible in the scope in which `t:
-p` is declared.
+rules of access control, the implementation is visible in the scope in which `T:
+P` is declared.
 
 With respect to generic types, clause (i) of this rule is not fully implemented.
 A generic type instantiated with its generic arguments specified as concrete
@@ -106,7 +106,7 @@ implementations, `i`*<sub>1</sub>* and `i`*<sub>2</sub>*, is determined as
 follows:
 
 If `i`*<sub>1</sub>* is declared in an extension of a protocol and
-`i`*<sub>2</sub>* is declared on t (whether in the declaration and/or an
+`i`*<sub>2</sub>* is declared on T (whether in the declaration and/or an
 extension), then `i`*<sub>2</sub>* is more specialized.
 
 If `i`*<sub>1</sub>* is declared in an extension of protocol p1 and
@@ -117,7 +117,7 @@ from p2, `i`*<sub>1</sub>* is more specialized, and (iii) otherwise,
 other implementation that is more specialized than both `i`*<sub>1</sub>* and
 `i`*<sub>2</sub>*, an error will be raised at compile time).
 
-If `i`*<sub>1</sub>* and `i`*<sub>2</sub>* are both declared on t (whether in
+If `i`*<sub>1</sub>* and `i`*<sub>2</sub>* are both declared on T (whether in
 the declaration and/or an extension) or are both declared in extensions of the
 same protocol, then (i) if the declaration of `i`*<sub>1</sub>* is more
 constrained than the declaration of `i`*<sub>2</sub>*, `i`*<sub>1</sub>* is more
@@ -129,8 +129,8 @@ specialized than both `i`*<sub>1</sub>* and `i`*<sub>2</sub>*, an error will be
 raised at compile time).[^1]
 
 [^1]: Given the way conditional declarations work or don’t work, I’m not sure
-    these declared-on-same-type situations could arise in a meaningful
-    way. Thoughts?
+      these declared-on-same-type situations could arise in a meaningful
+      way. Thoughts?
 
 ## 1.5 Set of Protocol Witnesses
 
