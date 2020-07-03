@@ -37,7 +37,7 @@ declarations are conditional with disjoint conditions.
 
 ## 1.2 Protocol Witness
 
-Given the declaration of conformance `T: P`, a *protocol requirement* *m* is a
+Given the declaration of conformance `T: P`, a **protocol requirement** *m* is a
 statement in the declaration of `P` that `T` (or any other type seeking to
 conform to `P`) must have a member satisfying the requirements of *m*.  A member
 of `T` that satisfies the requirements of *m* is referred to as an
