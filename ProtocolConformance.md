@@ -2,11 +2,11 @@
 
 >***Protocol Witness*** - Given a type `T` [declared to conform to
 >protocol](#11-declaration-of-protocol-conformance) `P` and a protocol
->requirement `m` of `P`, the [protocol witness](#12-protocol-witness) for `m` is
+>requirement *m* of `P`, the [protocol witness](#12-protocol-witness) for *m* is
 >the implementation that is the [most
 >specialized](#14-most-specialized-implementation) of the [unconditionally
 >accessible implementations](#13-unconditionally-accessible-implementations) of
->`m` on `T`, as determined in the scope in which the declaration `T: P` is
+>*m* on `T`, as determined in the scope in which the declaration `T: P` is
 >stated.
 
 When a type is declared to conform to a protocol, a set of
@@ -37,23 +37,23 @@ declarations are conditional with disjoint conditions.
 
 ## 1.2 Protocol Witness
 
-Given the declaration of conformance `T: P`, a *protocol requirement* `m` is a
+Given the declaration of conformance `T: P`, a *protocol requirement* *m* is a
 statement in the declaration of `P` that `T` (or any other type seeking to
-conform to `P`) must have a member satisfying the requirements of `m`.  A member
-of `T` that satisfies the requirements of `m` is referred to as an
-*implementation* of `m`.
+conform to `P`) must have a member satisfying the requirements of *m*.  A member
+of `T` that satisfies the requirements of *m* is referred to as an
+*implementation* of *m*.
 
-Given `T: P` and a protocol requirement `m` of `P`, one and only one of `T`'s
-implementations of `m` will actually be used as the implementation of `m`.  Such
-implementation of `m` is referred to as the *protocol witness* for the `m`
+Given `T: P` and a protocol requirement *m* of `P`, one and only one of `T`'s
+implementations of *m* will actually be used as the implementation of *m*.  Such
+implementation of *m* is referred to as the *protocol witness* for the *m*
 requirement of the conformance `T: P`.
 
-The protocol witness for `m` is the implementation that is the *most
-specialized* of the *unconditionally accessible* implementations of `m` on `T`,
+The protocol witness for *m* is the implementation that is the *most
+specialized* of the *unconditionally accessible* implementations of *m* on `T`,
 as determined in the scope in which the declaration `T: P` is stated.  If `T`
-has only one unconditionally accessible implementation of `m`, that
+has only one unconditionally accessible implementation of *m*, that
 implementation will be the protocol witness.  If `T` has more than one
-unconditionally accessible implementation of `m`, the most specialized of those
+unconditionally accessible implementation of *m*, the most specialized of those
 implementations will be the protocol witness.
 
 An implementation is not *declared* to be a protocol witness.  The identity of
@@ -68,7 +68,7 @@ A type's possible implementation of a protocol requirement is available to serve
 as the protocol witness for the requirement only if the implementation is an
 *unconditionally accessible* member of the type in the scope in which the
 protocol conformance is declared.  Given a declaration of `T: P` and an
-implementation of a protocol requirement `m` of `P`, the implementation is
+implementation of a protocol requirement *m* of `P`, the implementation is
 *unconditionally accessible* if and only if (i) `T` satisfies the conditions, if
 any, to which the declaration of the implementation is subject, and (ii) per the
 rules of access control, the implementation is visible in the scope in which `T:
