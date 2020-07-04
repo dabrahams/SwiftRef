@@ -1,4 +1,5 @@
-theme: jekyll-theme-minimal
+# Use the latest version of the theme; GitHub serves an outdated one.
+remote_theme: pages-themes/minimal
 title: Swift Reference
 description: A community-maintained reference manual for the Swift programming language.
 show_downloads: true
