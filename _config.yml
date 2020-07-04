@@ -4,4 +4,3 @@ remote_theme: pages-themes/minimal
 theme_name: jekyll-theme-minimal
 title: Swift Reference
 description: A community-maintained reference manual for the Swift programming language.
-show_downloads: true
