@@ -16,7 +16,7 @@ currently being served by [GitHub Pages](https://pages.github.com).
 * Avoid unnecessary HTML tags; use Markdown formatting to the degree possible.
 * Wrap lines at 80 columns to support diff-friendly change tracking.
 * Follow writing conventions spelled out [in the
-  document](https://dabrahams.github.io/SwiftRef/chapters/intro.html#conventions).
+  document](https://dabrahams.github.io/SwiftRef/chapters/0100%20intro.html#conventions).
 * Chapters are represented as individual Markdown files in the chapters/
   subdirectory.
 * Each chapter begins with a 2nd-level heading, e.g. `## Chapter Name`.  All
