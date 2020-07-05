@@ -19,3 +19,9 @@ is intended to describe aspects of Swift analogous to what's found in
 1. *The Swift Programming Language*, [Operators](https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#ID418)
 1. *The Swift Programming Language*, [Summary of the Grammar: Lexical Structure](https://docs.swift.org/swift-book/ReferenceManual/zzSummaryOfTheGrammar.html#ID481)
 1. Swift Repository, [Lexer.cpp](https://github.com/apple/swift/blob/master/lib/Parse/Lexer.cpp)
+1. *The Swift Programming Language*, [Guide: Basic Operators](https://docs.swift.org/swift-book/LanguageGuide/BasicOperators.html)
+1. *The Swift Programming Language*, [Guide: Advanced Operators](https://docs.swift.org/swift-book/LanguageGuide/AdvancedOperators.html#)
+1. *The Swift Programming Language*, [Guide: String Literals](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID286)
+1. *The Swift Programming Language*, [Guide: String Interpolation](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID292)
+1. *The Swift Programming Language*, [Guide: Unicode](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID293)
+
