@@ -33,3 +33,8 @@ be part of most users' programming models.  A proper language reference manual
 prioritizes precision and completeness over friendly narrative, but also
 describes the language at a level far above that of the language's
 implementation.
+
+### Resources
+
+The source for this document is developed in the
+[SwiftRef](https://github.com/dabrahams/swiftref) project.
