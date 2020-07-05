@@ -1,0 +1,21 @@
+{% 
+  assign chapters = site.pages
+      | where_exp: "p", "p.dir == '/chapters/'"
+      | sort: "path"
+%}
+<ul class="navigation">
+  {% for p in chapters %}
+  <li>
+    <details {% if p.url == page.url %}open{% endif %}>
+      <summary><a href="{{p.url}}">{{p.title}}</a></summary> 
+      {% comment %}
+        p.content may not have been rendered into html depending on context
+      {% endcomment %}
+      {% assign html_content = p.content | markdownify %}
+
+      {% include toc.html html=html_content baseurl=p.url h_min=2 %}
+    </details>
+  </li>
+  {% endfor %}
+</ul>
+

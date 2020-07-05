@@ -37,10 +37,10 @@
           <li><a href="{{ site.github.repository_url }}">View On <strong>GitHub</strong></a></li>
         </ul>
         {% endif %}
+        {% include navigation.html %}
       </header>
       <section>
 
-      {% include toc.html html=content class="inline_toc" %}
       {{ content }}
 
       </section>
