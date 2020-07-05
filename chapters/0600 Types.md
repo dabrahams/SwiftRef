@@ -34,9 +34,4 @@ is intended to describe aspects of Swift analogous to what's found in
 1. *The Swift Programming Language*, [Guide: Type Casting](https://docs.swift.org/swift-book/LanguageGuide/TypeCasting.html#)
 1. *The Swift Programming Language*, [Guide: Structures and Classes](https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html)
 1. *The Swift Programming Language*, [Guide: Enumerations](https://docs.swift.org/swift-book/LanguageGuide/Enumerations.html)
-
-
-
-
-
-
+1. *The Swift Programming Language*, [Type Alias Declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID361)
