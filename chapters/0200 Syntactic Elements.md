@@ -18,3 +18,4 @@ is intended to describe aspects of Swift analogous to what's found in
 1. *The Swift Programming Language*, [Literals](https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#ID414)
 1. *The Swift Programming Language*, [Operators](https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#ID418)
 1. *The Swift Programming Language*, [Summary of the Grammar: Lexical Structure](https://docs.swift.org/swift-book/ReferenceManual/zzSummaryOfTheGrammar.html#ID481)
+1. Swift Repository, [Lexer.cpp](https://github.com/apple/swift/blob/master/lib/Parse/Lexer.cpp)
