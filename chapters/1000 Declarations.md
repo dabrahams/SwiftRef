@@ -32,3 +32,4 @@ is intended to describe aspects of Swift analogous to what's found in
 1. *The Swift Programming Language*, [Precedence Group Declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID550)
 1. *The Swift Programming Language*, [Declaration Modifiers](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID381)
 1. Swift Repository, [DeclarationTypeChecker.rst](https://github.com/apple/swift/blob/master/docs/proposals/DeclarationTypeChecker.rst)
+1. *The Swift Programming Language*, [Grammar of a Declaration](https://docs.swift.org/swift-book/ReferenceManual/zzSummaryOfTheGrammar.html#ID477)
