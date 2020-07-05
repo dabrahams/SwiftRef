@@ -1,3 +1,8 @@
 ---
 ---
 @import "{{ site.theme_name }}";
+
+ul.navigation, .navigation ul {
+    list-style-type: none;
+    padding-inline-start: 10px;
+}
