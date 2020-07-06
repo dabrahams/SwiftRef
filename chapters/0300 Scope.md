@@ -18,3 +18,4 @@ is intended to describe aspects of Swift analogous to what's found in
 1. Swift Repository, [NameLookup.cpp](https://github.com/apple/swift/blob/master/lib/AST/NameLookup.cpp)
 1. Swift Repository, [ModuleNameLookup.cpp](https://github.com/apple/swift/blob/master/lib/AST/ModuleNameLookup.cpp)
 1. Swift Repository, [UnqualifiedLookup.cpp](https://github.com/apple/swift/blob/master/lib/AST/UnqualifiedLookup.cpp)
+1. Swift Repository, [AccessControl.rst](AccessControl.rst)
