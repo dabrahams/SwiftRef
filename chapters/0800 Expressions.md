@@ -16,3 +16,4 @@ is intended to describe aspects of Swift analogous to what's found in
 1. *The Swift Programming Language*, [Primary Expressions](https://docs.swift.org/swift-book/ReferenceManual/Expressions.html#ID389)
 1. *The Swift Programming Language*, [Postfix Expressions](https://docs.swift.org/swift-book/ReferenceManual/Expressions.html#ID397)
 1. *The Swift Programming Language*, [Summary of the Grammar: Expressions](https://docs.swift.org/swift-book/ReferenceManual/zzSummaryOfTheGrammar.html#ID480)
+1. Swift Repository, [Expr.cpp](https://github.com/apple/swift/blob/master/lib/AST/Expr.cpp) 
