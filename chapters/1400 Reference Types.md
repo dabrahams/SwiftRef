@@ -12,7 +12,7 @@ is intended to describe aspects of Swift analogous to what's found in
 ### References
 
 1. *The Swift Programming Language*, [Class Declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID368)
-1. *The Swift Programming Language*, [Guide: Classes Are Reference Types](https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#D89)
+1. *The Swift Programming Language*, [Guide: Classes Are Reference Types](https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID89)
 1. *The Swift Programming Language*, [Guide: Inheritance](https://docs.swift.org/swift-book/LanguageGuide/Inheritance.html)
 1. *The Swift Programming Language*, [Guide: Type Casting](https://docs.swift.org/swift-book/LanguageGuide/TypeCasting.html)
 1. *The Swift Programming Language*, [Summary of the Grammar: Class Declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID368)
