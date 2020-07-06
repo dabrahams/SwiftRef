@@ -24,4 +24,4 @@ is intended to describe aspects of Swift analogous to what's found in
 1. *The Swift Programming Language*, [Guide: String Literals](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID286)
 1. *The Swift Programming Language*, [Guide: String Interpolation](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID292)
 1. *The Swift Programming Language*, [Guide: Unicode](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID293)
-
+1. Swift Repository, [Literals.md](https://github.com/apple/swift/blob/master/docs/Literals.md)
