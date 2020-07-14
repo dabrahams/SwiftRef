@@ -8,7 +8,7 @@ of `T: P`.  This document specifies how Swift determines a conformance.
 A **protocol conformance** is the set of witnesses used by a concrete type to satisfy the requirements of a 
 protocol.  The syntactic declaration, `T: P`, that type `T` conforms to protocol `P` is separate and distinct 
 from the determination of the set of witnesses that is a conformance.  The substance of a conformance is not 
-declared.  It is created in response to a type being declared conform to a protocol.  The set of witnesses 
+declared.  It is created in response to a type being declared to conform to a protocol.  The set of witnesses 
 that is a conformance is inferred from the context.
 
 For a type `T` to conform to a protocol `P`, `T` must be declared to conform to `P`, and `T` must have at 
@@ -23,9 +23,9 @@ by the generic type's declaration and extensions.
  conform, or conditionally may conform, to one or more protocols, which establishes a pattern for protocol 
  conformance.  When a concretization is formed, its protocol conformances are determined by that pattern.*</sub>
 
-A declaration that `T` conforms to `P` further constitutes, with respect to each protocol `o`*<sub>i</sub>* which 
-`P` refines, a declaration that `T` conforms to `o`*<sub>i</sub>*.  Thus, for the declaration of `T: P` to be 
-valid, the implicit declarations of each `T: o`*<sub>i</sub>* must be valid.  For each conformance `T: o`*<sub>i</sub>*, 
+A declaration that `T` conforms to `P` further constitutes, with respect to each protocol `O`*<sub>i</sub>* which 
+`P` refines, a declaration that `T` conforms to `O`*<sub>i</sub>*.  Thus, for the declaration of `T: P` to be 
+valid, the implicit declarations of each `T: O`*<sub>i</sub>* must be valid.  For each conformance `T: O`*<sub>i</sub>*, 
 a distinct set of protocol witnesses is established. 
 
 A type `T` cannot be declared to conform to a protocol `P` if, within the visible scope, another declaration 
