@@ -1,0 +1,56 @@
+/* grammar */
+
+.admonition.grammar {
+    border-left: 5px solid rgba(233,233,233,1);
+    margin: 20px 0;
+    padding-left: 15px;
+    padding-bottom: 1px;
+    font-size: 0.8em;
+    background: transparent;
+}
+.admonition.grammar p.admonition-title {
+    margin-bottom: 8px;
+}
+.admonition.grammar p {
+    margin: 0;
+}
+.admonition.grammar p.syntax-def {
+    margin-left: 25px;
+    text-indent: -25px;
+}
+.admonition.grammar .syntax-def-name {
+    color: rgba(128,128,128,1);
+    font-style: italic;
+    font-size: 15px;
+}
+.admonition.grammar .arrow {
+    padding: 0 6px;
+}
+.admonition.grammar code {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0 3px;
+}
+.admonition.grammar a.syntax-def {
+    font-size: 15px;
+    font-style: italic;
+    padding: 0 3px;
+}
+.admonition.grammar sub {
+    color: rgba(128,128,128,1);
+    font-size: 12px;
+    font-style: italic;
+    margin-left: -3px;
+    padding-right: 5px;
+    vertical-align: baseline;
+    position: relative;
+    top: 0.3em;
+}
+.admonition.grammar .syntax-group {
+    margin-bottom: 10px;
+}
+
+
