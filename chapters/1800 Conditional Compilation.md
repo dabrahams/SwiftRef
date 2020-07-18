@@ -12,3 +12,5 @@ is intended to describe aspects of Swift analogous to what's found in
 ### References
 
 1. *The Swift Programming Language*, [Compiler Control Statements](https://docs.swift.org/swift-book/ReferenceManual/Statements.html#ID538)
+2. Dave DeLong, *Blog*, [Conditional Compilation](https://davedelong.com/blog/2018/07/25/conditional-compilation-in-swift-part-1/)
+
