@@ -12,3 +12,8 @@ ul.navigation {
     list-style-type: none;
     padding-inline-start: 20px;
 }
+
+a:hover {
+    font-weight: inherit;
+    text-decoration: underline;
+}
