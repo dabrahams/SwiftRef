@@ -158,3 +158,8 @@ h5:before {
 body {
     margin-left: 40px;
 }
+
+header {
+    overflow-y: auto;
+    max-height: 100%;
+}
