@@ -1,6 +1,6 @@
 import XCTest
 
-/// Example 1.5.2
+/// Example A
 
 protocol P {
   var id: String { get } // (m1)
