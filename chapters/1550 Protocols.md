@@ -1,4 +1,22 @@
-# 1 Protocol Conformance
+---
+---
+
+## Protocols
+
+### Requirements
+
+### Extension
+
+### Adoption
+#### Explicit Adoption
+#### Implicit Adoption
+##### Lesser-Refined Protocols
+##### Tuples
+
+
+### Conformance
+
+<p class="draft item"> </p>
 In a given scope, a concrete type `T` **conforms** to a protocol `P` if and only if:
 - `T` is a nominal type and the conformance is implied [<-- link to section on how this implication is
   determined] by a
@@ -19,7 +37,7 @@ each requirement *r* of `P` onto a corresponding **witness** that satisfies [<--
 
 This chapter describes how a conformance's mapping from requirements to witnesses is determined.
 
-## 1.1 Creation of a Conformance
+#### Creation of a Conformance
 A **protocol conformance** is the set of witnesses used by a concrete type to satisfy the requirements of a 
 protocol.  The syntactic declaration, `T: P`, that type `T` conforms to protocol `P` is separate and distinct 
 from the determination of the set of witnesses that is a conformance.  The substance of a conformance is not 
@@ -48,7 +66,7 @@ exists of `T: P`.  This rule holds true even where competing declarations are co
 In a given scope, a type can conform to a protocol in only one way.
 
 
-## 1.2 Requirements
+#### Requirements
 
 A **protocol requirement** *m* is a statement in the declaration of a protocol that a type declared to conform 
 to the protocol must have a member satisfying *m*.
@@ -57,12 +75,12 @@ If one protocol refines another protocol, the requirements of the latter are not
 the former.  The requirements of a protocol are not overridden by a protocol that refines the protocol.  Thus, 
 the conformances formed by a refining protocol do not include witnesses for requirements of the refined protocol.
 
-## 1.3 Implementations
+#### Implementations
 
 Given `T: P` and a protocol requirement *m* of `P`, an **implementation** of *m* is any member of `T` that satisfies 
 *m*.  A type may have more than one implementation of a requirement.
 
-## 1.4 Witness
+#### Witness
 
 Given `T: P` and a protocol requirement *m* of `P`, the **witness** for *m* is the implementation used to perform 
 *m*.  One and only one of `T`'s implementations of *m* will be the witness for *m*.
@@ -75,7 +93,7 @@ of *m* on `T`, as determined in the scope in which the declaration `T: P` is sta
 of *m*, that implementation will be the protocol witness.  If `T` has more than one implementation of *m*, the most 
 specialized of those implementations will be the protocol witness.
 
-## 1.5 Most Specialized Implementation
+#### Most Specialized Implementation
 Among a type's implementations of a protocol requirement, the most specialized implementation will serve as the 
 witness for the requirement.  If only one implementation of a requirement is present, that implementation is the 
 most specialized.
@@ -86,7 +104,7 @@ and compared iteratively using these rules until the most specialized implementa
 
 The relative specialization between two implementations of a requirement is determined as follows:
 
-### 1.5.1 Implementations on Protocol and Conforming Type
+##### Implementations on Protocol and Conforming Type
 *Subject to the limitation stated in Section 1.5.4*, if one implementation is declared in an extension of a protocol 
 and another implementation is declared on a conforming type (whether in its declaration and/or an extension), the latter 
 implementation is more specialized.
@@ -112,7 +130,7 @@ struct S {
 extension S: P {}
 ```
 
-### 1.5.2 Implementations on Two Different Protocols 
+##### Implementations on Two Different Protocols 
 *Subject to the limitation stated in Section 1.5.4*, if one implementation is declared in an extension of one protocol 
 and another implementation is declared in an extension of another protocol, then:
 
@@ -162,7 +180,7 @@ print(s.id) // (a2) // "Q_Numeric"
 print(getId(of: s)) // "Q_Numeric"
 ```
 
-### 1.5.3 Implementations on Same Type 
+##### Implementations on Same Type 
 *Subject to the limitation stated in Section 1.5.4*, if two implementations are both declared on the same protocol 
 or the same concrete type, then:
 
@@ -215,7 +233,7 @@ print(s.id) // (a2) // "O_Numeric"
 print(getId(of: s)) // "O_Numeric"
 ```           
 
-### 1.5.4 Implementations on Generics via Constrained Extensions
+##### Implementations on Generics via Constrained Extensions
 If a concretization is declared to conform to a protocol and an implementation of a requirement of the protocol is 
 more constrained than the declaration of conformance, the implementation is unavailable to serve as a witness of the 
 conformance of the concretization to the protocol.  Given concretization `T`, the conformance `T: P`, requirement *m* 
@@ -307,3 +325,63 @@ let x = X<Int>()
 print(x.id) // (a2) "Q_Numeric"
 print(getId(of: x)) // "P"
 ```
+
+
+### References
+
+1. Suyash Srijan, *[Protocol Witness Matching Mini-Manifesto]*(https://forums.swift.org/t/protocol-witness-matching-mini-manifesto/32752)
+
+
+
+
+<head>
+  /* This local style sheet is being used to experiment with refinements to the 
+  css for the site. Successful styles will be moved to appropriate files, and 
+  this style sheet will be discarded.  */
+  <style type="text/css">
+    p {
+      margin-block-start: 1em;
+      margin-block-end: auto;
+    }
+    ul {
+      margin-block-start: 0em;
+      margin-block-end: 0em;
+    }
+    li {
+      margin-top: 0.5em;
+    }
+    .item {
+      height: 0.3em;
+    }
+    .wrapper {
+      width: 1060px;
+    }
+    section {
+      width: 700px;
+    }
+    h2 {
+      font-size: 2.0em;
+    }
+    h3 {
+      font-size: 1.5em;
+    }
+    h4 {
+      font-size: 1.33em;
+    }
+    h5 {
+      font-size: 1.17em;
+    }
+    h6 {
+      font-size: 1.0em;
+    }
+    .draft.item {
+      color: red;
+      text-indent: -50px;
+    }
+    .draft.item:before {
+      content: "DRAFT: " counter(item);
+      counter-increment: item;
+    }
+  </style>
+</head>
+
