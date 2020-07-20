@@ -1,8 +1,23 @@
 # 1 Protocol Conformance
-When a named concrete type[^1] `T` is conformed to a protocol `P`, a set of implementations--*witnesses*--is 
-determined, one for each requirement of `P`.   That set of witnesses is referred to as the protocol conformance
-of `T: P`.  This document specifies how Swift determines a conformance.
-[^1]: What about tuples and [SE-0283](https://github.com/apple/swift-evolution/blob/master/proposals/0283-tuples-are-equatable-comparable-hashable.md)?
+In a given scope, a concrete type `T` **conforms** to a protocol `P` if and only if:
+- `T` is a nominal type and the conformance is implied [<-- link to section on how this implication is
+  determined] by a
+  *[type-inheritance-clause](https://docs.swift.org/swift-book/ReferenceManual/Types.html#grammar_type-inheritance-clause)* 
+  visible in that scope.
+- `T` is is a non-nominal type that implicitly conforms to `P` as described in [section dealing
+  with tuples].
+
+A protocol **conformance** of `T` to `P` is a triple (`T`, `P`, *M*), where *M* is a mapping from
+each requirement *r* of `P` onto a corresponding **witness** that satisfies [<--link to requirement satisfaction] *r* for `T`.   
+
+| Requirement | Witness |
+|-|-|
+| associated type | concrete type nested in `T` |
+| non-`static` method | non-`static`, non-`class` method of `T` |
+| non-operator `static` method | `static` or `class` method of `T`, or an `enum` case as described in [section describing that horrible new feature] |
+| static operator | `static` or `class` operator of `T`, or a concrete module-scope operator |
+
+This chapter describes how a conformance's mapping from requirements to witnesses is determined.
 
 ## 1.1 Creation of a Conformance
 A **protocol conformance** is the set of witnesses used by a concrete type to satisfy the requirements of a 
