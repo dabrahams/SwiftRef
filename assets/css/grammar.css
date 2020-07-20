@@ -1,4 +1,6 @@
-/* grammar */
+/* Swift Reference */
+
+/* Styles for use with grammar */
 
 /* styles a block of grammar */
 .grammar {
@@ -117,60 +119,6 @@ p>code,li>code,dd>code,blockquote>code,td>code{
     background-color:#f7f7f7
 }
 
-
-/* section numbering */
-/* TO BE MOVED TO NEW FILE */
-h2 {
-    text-indent: -40px;
-    counter-reset: section;
-}
-h3 {
-    text-indent: -40px;
-    counter-reset: subsection;
-}
-h3:before {
-    content: counter(section) ". ";
-    counter-increment: section;
-}
-h4 {
-    text-indent: -30px;
-    counter-reset: subsubsection item; 
-}
-h4:before {
-    content: counter(section) "." counter(subsection) " ";
-    counter-increment: subsection;
-}
-h5 {
-    text-indent: -20px;
-    counter-reset: item;
-}
-h5:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
-    counter-increment: subsubsection;
-}
-
-
-/* item numbering */
-/* TO BE MOVED TO NEW FILE */
-.item {
-    text-indent: -20px;
-    margin-bottom: -2em;
-    font-style: italic;
-    font-size: 0.7em;
-    color: blue;
-}
-.item:before {
-    content: counter(item);
-    counter-increment: item;
-}
-
-
-/* alignment of body */
-/* note that item numbers and headers have a negative indent */
-/* TO BE MOVED TO NEW FILE */
-body {
-    margin-left: 40px;
-}
 
 /* Provide scrollbar when navigation menu overflows height of the viewport */
 /* TO BE MOVED TO NEW FILE */
