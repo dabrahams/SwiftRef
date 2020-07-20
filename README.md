@@ -1,39 +1,40 @@
 ## Welcome to SwiftRef
 
-Web Home: [dabrahams.github.io/SwiftRef](https://dabrahams.github.io/SwiftRef/).
+This is the development home of SwiftRef, a community project to create a
+technical reference for the [Swift programming language](http://swift.org).
 
-You can use the [editor on GitHub](https://github.com/dabrahams/SwiftRef/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Please see the [latest published draft](https://dabrahams.github.io/SwiftRef/)
+for information about the motivation for this project.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Infrastructure
 
-### Markdown
+The reference is developed as a [Jekyll](https://jekyllrb.com) website,
+currently being served by [GitHub Pages](https://pages.github.com).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Conventions and Guidelines
 
-```markdown
-Syntax highlighted code block
+* Avoid unnecessary HTML tags; use Markdown formatting to the degree possible.
+* Wrap lines at 80 columns to support diff-friendly change tracking.
+* Follow writing conventions spelled out [in the
+  document](https://dabrahams.github.io/SwiftRef/chapters/0100%20intro.html#conventions).
+* Chapters are represented as individual Markdown files in the chapters/
+  subdirectory.
+* Each chapter begins with a 2nd-level heading, e.g. `## Chapter Name`.  All
+  other headings in a chapter are 3rd-level and below.
+* Each file's name starts with a 4-digit number that determines its order in the
+  overall document.  Initial numbering is spaced by 100s.
+* Maintain stable file names and heading titles for linkability until another
+  solution is in place.
 
-# Header 1
-## Header 2
-### Header 3
+### Development Hints
 
-- Bulleted
-- List
+Creating a complete installation of jekyll and all the parts needed for github
+pages development can be fraught.  If you install
+[docker-compose](https://docs.docker.com/compose/), you can start a webserver
+serving the site at http://localhost:4000 by invoking
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+docker-compose up
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/dabrahams/SwiftRef/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+in the root directory of your working copy.
