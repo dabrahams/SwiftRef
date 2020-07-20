@@ -1,5 +1,8 @@
-/* grammar */
+/* Swift Reference */
 
+/* Styles for use with grammar */
+
+/* styles a block of grammar */
 .grammar {
     border-left: 5px solid rgba(233,233,233,1);
     margin: 20px 0;
@@ -8,6 +11,7 @@
     background: transparent;
     font-family:"Helvetica Neue", Helvetica, Arial, Verdana, sans-serif
 }
+/* styles the title of a grammar block:  GRAMMAR OF A _____ */
 .grammar p.admonition-title {
     margin-bottom: 8px;
     font-size: 10px;
@@ -15,18 +19,22 @@
 .grammar p {
     margin: 0;
 }
+/* styles a grammar definition with a hanging first line */
 .grammar p.syntax-def {
     margin-left: 25px;
     text-indent: -25px;
 }
+/* ___ */
 .grammar span.name {
     color: rgba(128,128,128,1);
     font-style: italic;
     font-size: 15px;
 }
+/* styles the arrow symbol */
 .grammar .arrow {
     padding: 0 6px;
 }
+/* styles keywords and symbols, like ();:.{}[] */
 .grammar code {
     padding: 0;
     border: 0;
@@ -35,22 +43,28 @@
     font-weight: bold;
     padding: 0 3px;
 }
+/* styles the "opt" annotation */
 .grammar sub {
     color: rgba(128,128,128,1);
     font-size: 12px;
     font-style: italic;
-    margin-left: 0px;
+    margin-left: -4px; /* tightens to preceding text, which usually is padded */
     padding-right: 5px;
     vertical-align: baseline;
     position: relative;
     top: 0.3em;
 }
+/* add this class where (grammar sub) is too tight to preceeding text */
+.grammar sub.loosen {
+    margin-left: 0px; 
+}
+/* styles a group of grammar statements to add whitespace at bottom of group */
 .grammar .syntax-group {
     margin-bottom: 10px;
 }
 
 /* admonition */
-
+/* TO BE MOVED TO NEW FILE */
 .admonition {
     margin-left: 0px;
     border-left: solid 5px #eee;
@@ -70,7 +84,7 @@
 
 
 /* code */
-
+/* TO BE MOVED TO NEW FILE */
 code{
     white-space:pre-line
 }
@@ -103,63 +117,4 @@ p>code,li>code,dd>code,blockquote>code,td>code{
     border:1px solid #E5E5E5;
     border-radius: 3px;
     background-color:#f7f7f7
-}
-
-
-/* section numbering */
-
-h2 {
-    text-indent: -40px;
-    counter-reset: section;
-}
-h3 {
-    text-indent: -40px;
-    counter-reset: subsection;
-}
-h3:before {
-    content: counter(section) ". ";
-    counter-increment: section;
-}
-h4 {
-    text-indent: -30px;
-    counter-reset: subsubsection item; 
-}
-h4:before {
-    content: counter(section) "." counter(subsection) " ";
-    counter-increment: subsection;
-}
-h5 {
-    text-indent: -20px;
-    counter-reset: item;
-}
-h5:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
-    counter-increment: subsubsection;
-}
-
-
-/* item numbering */
-.item {
-    text-indent: -20px;
-    margin-bottom: -2em;
-    font-style: italic;
-    font-size: 0.7em;
-    color: blue;
-}
-.item:before {
-    content: counter(item);
-    counter-increment: item;
-}
-
-
-/* alignment of body */
-/* note that item numbers and headers have a negative indent */
-
-body {
-    margin-left: 40px;
-}
-
-header {
-    overflow-y: auto;
-    max-height: 100%;
 }
