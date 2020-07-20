@@ -39,19 +39,15 @@
     color: rgba(128,128,128,1);
     font-size: 12px;
     font-style: italic;
-    margin-left: -4px;
+    margin-left: 0px;
     padding-right: 5px;
     vertical-align: baseline;
     position: relative;
     top: 0.3em;
 }
-.grammar sub.loosen {
-    margin-left: 0px;
-}
 .grammar .syntax-group {
     margin-bottom: 10px;
 }
-
 
 /* admonition */
 
@@ -162,8 +158,6 @@ h5:before {
 body {
     margin-left: 40px;
 }
-
-/* make nav bar scrollable */
 
 header {
     overflow-y: auto;
