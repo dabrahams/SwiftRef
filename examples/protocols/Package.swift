@@ -8,8 +8,8 @@ let package = Package(
   products: [],
   dependencies: [],
   targets: [
-    .testTarget(name: "Test1.5.2"),
-    .testTarget(name: "Test1.5.3"),
-    .testTarget(name: "Test1.5.4"),
+    .testTarget(name: "TestA"),
+    .testTarget(name: "TestB"),
+    .testTarget(name: "TestC"),
   ]
 )
