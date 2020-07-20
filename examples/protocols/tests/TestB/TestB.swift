@@ -1,6 +1,6 @@
 import XCTest
 
-/// Example 1.5.3
+/// Example B
 
 protocol P {
   associatedtype V // (m2)
