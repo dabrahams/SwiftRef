@@ -1,4 +1,10 @@
-# 1 Protocol Conformance
+## Protocols and Existentials
+
+### Protocols
+#### Declaration
+#### Extension
+#### Adoption
+#### Conformance
 
 >***Protocol Witness*** - Given a type `T` [declared to conform to
 >protocol](#11-declaration-of-protocol-conformance) `P` and a protocol
@@ -14,7 +20,7 @@ implementations--*protocol witnesses*--is determined, one for each protocol
 requirement of the protocol.  This document specifies how Swift determines the
 set of protocol witnesses for a protocol conformance.
 
-## 1.1 Declaration of Protocol Conformance
+##### Declaration of Protocol Conformance
 For a type `T` to conform to a protocol `P`, `T` must be declared to conform to
 `P`, and `T` must have at least one unconditionally accessible implementation
 for each protocol requirement of `P`.  A distinct set of protocol witnesses is
@@ -35,7 +41,7 @@ cannot be declared to conform to a protocol `P` if, within the visible scope,
 another declaration exists of `T: P`.  This rule holds true even where competing
 declarations are conditional with disjoint conditions.
 
-## 1.2 Protocol Witness
+##### Protocol Witness
 
 Given the declaration of conformance `T: P`, a **protocol requirement** *m* is a
 statement in the declaration of `P` that `T` (or any other type seeking to
@@ -62,7 +68,7 @@ the scope, including all declarations made within the scope and those imported
 into the scope.  Careful engineering is required in order to achieve the
 intended witness for a given requirement.
 
-## 1.3 Unconditionally Accessible Implementations
+##### Unconditionally Accessible Implementations
 
 A type's possible implementation of a protocol requirement is available to serve
 as the protocol witness for the requirement only if the implementation is an
@@ -98,7 +104,7 @@ unavailable to serve as a protocol witness for the shared conformance.
     `BidirectionalCollection` and `RandomAccessCollection`.
 
 
-## 1.4 Most Specialized Implementation
+##### Most Specialized Implementation
 Among a type's unconditionally accessible implementations of a protocol
 requirement, the most specialized implementation will serve as the protocol
 witness for the requirement.  The relative specialization between two
@@ -132,7 +138,7 @@ raised at compile time).[^1]
       these declared-on-same-type situations could arise in a meaningful
       way. Thoughts?
 
-## 1.5 Set of Protocol Witnesses
+##### Set of Protocol Witnesses
 
 Given a declaration that a type conforms to a protocol, the protocol witness for
 the conformance is the set consisting of the protocol witness for each declared
@@ -144,3 +150,9 @@ Such set is immutable, and is not subject to replacement.
 
 If a protocol has no declared requirements, the protocol witness set for
 conformances to the protocol is empty.
+
+
+### Existentials
+
+### References
+
