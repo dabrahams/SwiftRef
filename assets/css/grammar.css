@@ -118,11 +118,3 @@ p>code,li>code,dd>code,blockquote>code,td>code{
     border-radius: 3px;
     background-color:#f7f7f7
 }
-
-
-/* Provide scrollbar when navigation menu overflows height of the viewport */
-/* TO BE MOVED TO NEW FILE */
-header {
-    overflow-y: auto;
-    max-height: 100%;
-}
