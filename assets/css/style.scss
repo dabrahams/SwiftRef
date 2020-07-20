@@ -2,6 +2,7 @@
 ---
 @import "{{ site.theme_name }}";
 @import "grammar.css";
+@import "headings.css";
 
 ul.navigation {
     list-style-type: none;
@@ -13,7 +14,14 @@ ul.navigation {
     padding-inline-start: 20px;
 }
 
+/* overrides jekyll hover-over-link behavior */
 a:hover {
     font-weight: inherit;
     text-decoration: underline;
+}
+
+/* adds scrollbar when navigation menu overflows height of the viewport */
+header {
+    overflow-y: auto;
+    max-height: 100%;
 }
