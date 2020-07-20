@@ -1,8 +1,8 @@
 import XCTest
 
-/// Example 1.5.4
+/// Example C
 
-/// Example 1.5.4.1
+/// Example C1
 
 protocol P {
   var id: String { get } // (m1)
@@ -33,8 +33,8 @@ class Test1: XCTestCase {
 }
 
 
-/// Example 1.5.4.2
-/// ... continuing from Example 1.5.4.1
+/// Example C2
+/// ... continuing from Example C1
 
 protocol Q: P {} // (c2)
 extension Q where V: Numeric {
