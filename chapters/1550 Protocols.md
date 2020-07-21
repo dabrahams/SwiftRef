@@ -43,31 +43,193 @@
     <p class="syntax-def">
       <span class="name" id="protocol-member">protocol-member</span>
       <span class="arrow"> → </span> 
-      <a href="#protocol-member-declaration">protocol-member-declaration</a>
+      <a href="#requirements">protocol-member-declaration</a>
       |
       <a href="#compiler-control-statement">compiler-control-statement</a>
     </p>
   </div>
 </div>
 
+<p class="draft item"> </p>
+[applicbale attributes]
+
+<p class="draft item"> </p>
+[access level modifiers]
+
+<p class="draft item"> </p>
+[type inheritance clause]
+
+<p class="draft item"> </p>
+[generic where clause]
+
 
 ### Requirements
 
 <p class="draft item"> </p>
 There are five types of protocol requirements:
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">associatedtype</code></li>
-  <li><code class="language-plaintext highlighter-rouge">var</code></li>
-  <li><code class="language-plaintext highlighter-rouge">func</code></li>
-  <li><code class="language-plaintext highlighter-rouge">subscript</code></li>
-  <li><code class="language-plaintext highlighter-rouge">init</code></li>
-</ul>
+* `associatedtype`
+* `var`
+* `func` 
+* `subscript`
+* `init`
 
-*to be continued*
+<p class="draft item"> </p>
+[what a requirement is]
+
+<p class="draft item"> </p>
+[applicbale attributes]
+
+<p class="draft item"> </p>
+[permitted use of access level modifiers]
+
 
 #### Associated Type
 
-#### Variable or Constant
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a protocol associated type declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-associated-type-declaration">protocol-associated-type-declaration</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-associated-type-declaration">protocol-associated-type-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <a href="#access-level-modifier">access-level-modifier</a><sub class="loosen">opt</sub>
+      <code>associatedtype</code>
+      <a href="#typealias-name">typealias-name</a>
+      <a href="#type-inheritance-clause">type-inheritance-clause</a><sub class="loosen">opt</sub>
+      <a href="#typealias-assignment">typealias-assignment</a><sub class="loosen">opt</sub>
+      <a href="#generic-where-clause">generic-where-clause</a><sub class="loosen">opt</sub>
+    </p>
+  </div>
+</div>
+
+<p class="draft item"> </p>
+[what it is]
+
+<p class="draft item"> </p>
+[what it is]
+
+
+#### Property
+
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a protocol property declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-property-declaration">protocol-property-declaration</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-property-declaration">protocol-property-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#variable-declaration-head">variable-declaration-head</a>
+      <a href="#variable-name">variable-name</a>
+      <a href="#type-annotation">type-annotation</a>
+      <a href="#getter-setter-keyword-block">getter-setter-keyword-block</a>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="variable-declaration-head">variable-declaration-head</span>
+      <span class="arrow"> → </span> 
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <a href="#declaration-modifiers">declaration-modifiers</a><sub class="loosen">opt</sub>
+      <code>var</code>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="variable-name">variable-name</span>
+      <span class="arrow"> → </span> 
+      <a href="#identifier">identifier</a>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="type-annotation">type-annotation</span>
+      <span class="arrow"> → </span> 
+      <code>:</code>
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <code>inout</code><sub>opt</sub>
+      <a href="#type">type</a>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="getter-setter-keyword-block">getter-setter-keyword-block</span>
+      <span class="arrow"> → </span> 
+      <code>{</code>
+      <a href="#getter-keyword-clause">getter-keyword-clause</a>
+      <a href="#setter-keyword-clause">setter-keyword-clause</a><sub class="loosen">opt</sub>
+      <code>}</code>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="getter-setter-keyword-block">getter-setter-keyword-block</span>
+      <span class="arrow"> → </span> 
+      <code>{</code>
+      <a href="#setter-keyword-clause">setter-keyword-clause</a>
+      <a href="#getter-keyword-clause">getter-keyword-clause</a>
+      <code>}</code>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="getter-keyword-clause">getter-keyword-clause</span>
+      <span class="arrow"> → </span> 
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <a href="#mutation-modifier">mutation-modifier</a><sub class="loosen">opt</sub>
+      <code>get</code>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="setter-keyword-clause">setter-keyword-clause</span>
+      <span class="arrow"> → </span> 
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <a href="#mutation-modifier">mutation-modifier</a><sub class="loosen">opt</sub>
+      <code>set</code>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="mutation-modifier">mutation-modifier</span>
+      <span class="arrow"> → </span> 
+      <code>mutating</code>
+      |
+      <code>nonmutating</code>
+    </p>
+  </div>
+</div>
+
+<p class="draft item"> </p>
+[what it is]
+
+<p class="draft item"> </p>
+[attributes appicable to property]
+
+<p class="draft item"> </p>
+[applicable declaration modifiers]
+
+<p class="draft item"> </p>
+[attributes appicable to type]
+
+<p class="draft item"> </p>
+[inout]
+
+<p class="draft item"> </p>
+[get]
+
+<p class="draft item"> </p>
+[get set]
+
+<p class="draft item"> </p>
+[attributes applicable to get and set]
+
+<p class="draft item"> </p>
+[mutating keyword on get or set]
+
+<p class="draft item"> </p>
+[nonmutating keyword on get or set]
+
 ##### Instance
 ##### Static
 
@@ -427,12 +589,16 @@ print(getId(of: x)) // "P"
 
 To grammar in other chapters:
 <ul>
-  <li id="identifier">identifier</li>  
+  <li id="identifier">identifier</li>
+  <li id="#type">type</li> 
   <li id="attributes">attributes</li>  
   <li id="access-level-modifier">access-level-modifier</li>
   <li id="type-inheritance-clause">type-inheritance-clause</li>
   <li id="#generic-where-clause">generic-where-clause</li>
   <li id="#compiler-control-statement">compiler-control-statement</li>
+  <li id="#typealias-name">typealias-name</li>
+  <li id="#typealias-assignment">typealias-assignment</li>
+  <li id="#declaration-modifiers">declaration-modifiers</li>
 </ul>
 
 
