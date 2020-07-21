@@ -3,15 +3,13 @@
 
 ## Protocols 
 
-<p>GRAMMAR OF A PROTOCOL DECLARATION</p>
+<p class="draft item"> </p>
+<p>A protocol is a set of <a href="#requirements">requirements</a>.  Through <a href="#adoption">adoption</a> of a protocol, a <a href="#conformance">conforming</a> class, structure or enumeration can be accessed through the interface defined by the requirements of the protocol, and may gain default and other functionality via extensions of the protocol.  Protocols are able to exist in a hierarchy, with one protocol <a href="#refinement">refining</a> another protocol.</p>
 
-<p>protocol-declaration → attributes opt access-level-modifier opt protocol protocol-name type-inheritance-clause opt generic-where-clause opt protocol-body
-protocol-name → identifier
-protocol-body → { protocol-members opt }
-protocol-members → protocol-member protocol-members opt
-protocol-member → protocol-member-declaration | compiler-control-statement</p>
+### Declaration
+
 <div class="admonition grammar">
-  <p class="admonition-title">Grammar of protocol declaration</p>
+  <p class="admonition-title">Grammar of a protocol declaration</p>
   <div class="syntax-group">
     <p class="syntax-def">
       <span class="name" id="protocol-declaration">protocol-declaration</span>
@@ -33,19 +31,30 @@ protocol-member → protocol-member-declaration | compiler-control-statement</p>
       <span class="name" id="protocol-body">protocol-body</span>
       <span class="arrow"> → </span> 
       <code>{</code>
-      <a href="#attributes">protocol-members</a><sub class="loosen">opt</sub>
+      <a href="#protocol-members">protocol-members</a><sub class="loosen">opt</sub>
       <code>}</code>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-members">protocol-members</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-member">protocol-member</a>
+      <a href="#protocol-members">protocol-members</a><sub class="loosen">opt</sub>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-member">protocol-member</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-member-declaration">protocol-member-declaration</a>
+      |
+      <a href="#compiler-control-statement">compiler-control-statement</a>
     </p>
   </div>
 </div>
 
-<p class="draft item"> </p>
-<p>A protocol is a set of <a href="#requirements">requirements</a>.  Through <a href="#adoption">adoption</a> of a protocol, a <a href="#conformance">conforming</a> class, structure or enumeration can be accessed through the interface defined by the requirements of the protocol, and may gain default and other functionality via extensions of the protocol.  Protocols are able to exist in a hierarchy, with one protocol <a href="#refinement">refining</a> another protocol.</p>
 
-<h3 id="requirements">Requirements</h3>
+### Requirements
 
 <p class="draft item"> </p>
-<p>There are five types of protocol requirements:</p>
+There are five types of protocol requirements:
 <ul>
   <li><code class="language-plaintext highlighter-rouge">associatedtype</code></li>
   <li><code class="language-plaintext highlighter-rouge">var</code></li>
@@ -54,33 +63,33 @@ protocol-member → protocol-member-declaration | compiler-control-statement</p>
   <li><code class="language-plaintext highlighter-rouge">init</code></li>
 </ul>
 
-<p><em>to be continued</em></p>
+*to be continued*
 
-<h4 id="associatedtype">associatedtype</h4>
+#### Associated Type
 
-<h4 id="var">var</h4>
-<h5 id="instance">Instance</h5>
-<h5 id="static">Static</h5>
+#### Variable or Constant
+##### Instance
+##### Static
 
-<h4 id="func">func</h4>
-<h5 id="instance-1">Instance</h5>
-<h5 id="static-1">Static</h5>
+#### Method or Operator
+##### Instance
+##### Static
 
-<h4 id="subscript">subscript</h4>
-<h5 id="instance-2">Instance</h5>
-<h5 id="static-2">Static</h5>
+#### Subscript
+##### Instance
+##### Static
 
-<h4 id="init">init</h4>
+#### Initializer
 
-<h3 id="extension">Extension</h3>
+### Extension
 
-<h3 id="refinement">Refinement</h3>
+### Refinement
 
-<h3 id="adoption">Adoption</h3>
-<h4 id="explicit-adoption">Explicit Adoption</h4>
-<h4 id="implicit-adoption">Implicit Adoption</h4>
-<h5 id="lesser-refined-protocols">Lesser-Refined Protocols</h5>
-<h5 id="tuples">Tuples</h5>
+### Adoption
+#### Explicit Adoption
+#### Implicit Adoption
+##### Lesser-Refined Protocols
+##### Tuples
 
 
 
@@ -418,17 +427,21 @@ print(getId(of: x)) // "P"
 
 To grammar in other chapters:
 <ul>
-<li id="attributes">attributes</li>  
-<li id="access-level-modifier">access-level-modifier</li>
-<li id="type-inheritance-clause">type-inheritance-clause</li>
-<li id="#generic-where-clause">generic-where-clause</li>
+  <li id="identifier">identifier</li>  
+  <li id="attributes">attributes</li>  
+  <li id="access-level-modifier">access-level-modifier</li>
+  <li id="type-inheritance-clause">type-inheritance-clause</li>
+  <li id="#generic-where-clause">generic-where-clause</li>
+  <li id="#compiler-control-statement">compiler-control-statement</li>
 </ul>
 
 
 <head>
-  /* This local style sheet is being used to experiment with refinements to the 
+  <!--
+  This local style sheet is being used to experiment with refinements to the 
   css for the site. Successful styles will be moved to appropriate files, and 
-  this style sheet will be discarded.  */
+  this style sheet will be discarded. 
+  -->
   <style type="text/css">
     p {
       margin-block-start: 1em;
