@@ -1,17 +1,99 @@
 ---
 ---
 
-## Protocols
+## Protocols 
 
-### Requirements
+<p>GRAMMAR OF A PROTOCOL DECLARATION</p>
 
-### Extension
+<p>protocol-declaration → attributes opt access-level-modifier opt protocol protocol-name type-inheritance-clause opt generic-where-clause opt protocol-body
+protocol-name → identifier
+protocol-body → { protocol-members opt }
+protocol-members → protocol-member protocol-members opt
+protocol-member → protocol-member-declaration | compiler-control-statement</p>
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of protocol declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="protocol-declaration">protocol-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <a href="#access-level-modifier">access-level-modifier</a><sub class="loosen">opt</sub>
+      <code>protocol</code>
+      <a href="#protocol-name">protocol-name</a>
+      <a href="#type-inheritance-clause">type-inheritance-clause</a><sub class="loosen">opt</sub>
+      <a href="#generic-where-clause">generic-where-clause</a><sub class="loosen">opt</sub>
+      <a href="#protocol-body">protocol-body</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-name">protocol-name</span>
+      <span class="arrow"> → </span> 
+      <a href="#identifier">identifier</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-body">protocol-body</span>
+      <span class="arrow"> → </span> 
+      <code>{</code>
+      <a href="#attributes">protocol-members</a><sub class="loosen">opt</sub>
+      <code>}</code>
+    </p>
+  </div>
+</div>
 
-### Adoption
-#### Explicit Adoption
-#### Implicit Adoption
-##### Lesser-Refined Protocols
-##### Tuples
+<p class="draft item"> </p>
+<p>A protocol is a set of <a href="#requirements">requirements</a>.  Through <a href="#adoption">adoption</a> of a protocol, a <a href="#conformance">conforming</a> class, structure or enumeration can be accessed through the interface defined by the requirements of the protocol, and may gain default and other functionality via extensions of the protocol.  Protocols are able to exist in a hierarchy, with one protocol <a href="#refinement">refining</a> another protocol.</p>
+
+<h3 id="requirements">Requirements</h3>
+
+<p class="draft item"> </p>
+<p>There are five types of protocol requirements:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">associatedtype</code></li>
+  <li><code class="language-plaintext highlighter-rouge">var</code></li>
+  <li><code class="language-plaintext highlighter-rouge">func</code></li>
+  <li><code class="language-plaintext highlighter-rouge">subscript</code></li>
+  <li><code class="language-plaintext highlighter-rouge">init</code></li>
+</ul>
+
+<p><em>to be continued</em></p>
+
+<h4 id="associatedtype">associatedtype</h4>
+
+<h4 id="var">var</h4>
+<h5 id="instance">Instance</h5>
+<h5 id="static">Static</h5>
+
+<h4 id="func">func</h4>
+<h5 id="instance-1">Instance</h5>
+<h5 id="static-1">Static</h5>
+
+<h4 id="subscript">subscript</h4>
+<h5 id="instance-2">Instance</h5>
+<h5 id="static-2">Static</h5>
+
+<h4 id="init">init</h4>
+
+<h3 id="extension">Extension</h3>
+
+<h3 id="refinement">Refinement</h3>
+
+<h3 id="adoption">Adoption</h3>
+<h4 id="explicit-adoption">Explicit Adoption</h4>
+<h4 id="implicit-adoption">Implicit Adoption</h4>
+<h5 id="lesser-refined-protocols">Lesser-Refined Protocols</h5>
+<h5 id="tuples">Tuples</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Conformance
@@ -332,6 +414,15 @@ print(getId(of: x)) // "P"
 1. Suyash Srijan, *[Protocol Witness Matching Mini-Manifesto]*(https://forums.swift.org/t/protocol-witness-matching-mini-manifesto/32752)
 
 
+### Temporary Link Targets
+
+To grammar in other chapters:
+<ul>
+<li id="attributes">attributes</li>  
+<li id="access-level-modifier">access-level-modifier</li>
+<li id="type-inheritance-clause">type-inheritance-clause</li>
+<li id="#generic-where-clause">generic-where-clause</li>
+</ul>
 
 
 <head>
@@ -373,6 +464,8 @@ print(getId(of: x)) // "P"
     }
     h6 {
       font-size: 1.0em;
+    }h3, h4, h5, h6 {
+      margin-top: 1em;
     }
     .draft.item {
       color: red;
