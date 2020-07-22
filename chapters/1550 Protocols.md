@@ -4,7 +4,15 @@
 ## Protocols 
 
 <p class="draft item"> </p>
-<p>A protocol is a set of <a href="#requirements">requirements</a>.  Through <a href="#adoption">adoption</a> of a protocol, a <a href="#conformance">conforming</a> class, structure or enumeration can be accessed through the interface defined by the requirements of the protocol, and may gain default and other functionality via extensions of the protocol.  Protocols are able to exist in a hierarchy, with one protocol <a href="#refinement">refining</a> another protocol.</p>
+A protocol is a set of [requirements](#requirements) enabling a uniform means of 
+accessing functionality on adopting types. A class, structure or 
+enumeration satisfying the requirements of a protocol may [adopt](#adoption) the 
+protocol, in which case, the type can be accessed through its 
+[conformance](#conformance) to the protocol.  A type's conformance to a protocol
+consists of one [witness](#witness) for each requirement.  A type adopting a 
+protocol may gain default and other functionality via [extensions](#extension) 
+of the protocol. Protocols may be declared in a hierarchy, with one protocol 
+being a [refinement](#refinement) of another protocol.
 
 ### Declaration
 
@@ -15,11 +23,14 @@
       <span class="name" id="protocol-declaration">protocol-declaration</span>
       <span class="arrow"> → </span> 
       <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
-      <a href="#access-level-modifier">access-level-modifier</a><sub class="loosen">opt</sub>
+      <a href="#access-level-modifier">
+      access-level-modifier</a><sub class="loosen">opt</sub>
       <code>protocol</code>
       <a href="#protocol-name">protocol-name</a>
-      <a href="#type-inheritance-clause">type-inheritance-clause</a><sub class="loosen">opt</sub>
-      <a href="#generic-where-clause">generic-where-clause</a><sub class="loosen">opt</sub>
+      <a href="#type-inheritance-clause">
+      type-inheritance-clause</a><sub class="loosen">opt</sub>
+      <a href="#generic-where-clause">
+      generic-where-clause</a><sub class="loosen">opt</sub>
       <a href="#protocol-body">protocol-body</a>
     </p>
     <p class="syntax-def">
@@ -31,21 +42,56 @@
       <span class="name" id="protocol-body">protocol-body</span>
       <span class="arrow"> → </span> 
       <code>{</code>
-      <a href="#protocol-members">protocol-members</a><sub class="loosen">opt</sub>
+      <a href="#protocol-members">
+      protocol-members</a><sub class="loosen">opt</sub>
       <code>}</code>
     </p>
     <p class="syntax-def">
       <span class="name" id="protocol-members">protocol-members</span>
       <span class="arrow"> → </span> 
       <a href="#protocol-member">protocol-member</a>
-      <a href="#protocol-members">protocol-members</a><sub class="loosen">opt</sub>
+      <a href="#protocol-members">
+      protocol-members</a><sub class="loosen">opt</sub>
     </p>
     <p class="syntax-def">
       <span class="name" id="protocol-member">protocol-member</span>
       <span class="arrow"> → </span> 
-      <a href="#requirements">protocol-member-declaration</a>
+      <a href="#protocol-member-declaration">protocol-member-declaration</a>
       |
       <a href="#compiler-control-statement">compiler-control-statement</a>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="protocol-member-declaration">
+      protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-associated-type-declaration">
+      protocol-associated-type-declaration</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-property-declaration">
+      protocol-property-declaration</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-method-declaration">
+      protocol-method-declaration</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-subscript-declaration">
+      protocol-subscript-declaration</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-initializer-declaration">
+      protocol-initializer-declaration</a>
     </p>
   </div>
 </div>
@@ -60,7 +106,7 @@
 [type inheritance clause]
 
 <p class="draft item"> </p>
-[generic where clause]
+[generic where clause versus typealias declaration]
 
 
 ### Requirements
@@ -86,23 +132,32 @@ There are five types of protocol requirements:
 #### Associated Type
 
 <div class="admonition grammar">
-  <p class="admonition-title">Grammar of a protocol associated type declaration</p>
+  <p class="admonition-title">
+  Grammar of a protocol associated type declaration</p>
   <div class="syntax-group">
     <p class="syntax-def">
-      <span class="name">protocol-member-declaration</span>
-      <span class="arrow"> → </span> 
-      <a href="#protocol-associated-type-declaration">protocol-associated-type-declaration</a>
-    </p>
-    <p class="syntax-def">
-      <span class="name" id="protocol-associated-type-declaration">protocol-associated-type-declaration</span>
+      <span class="name" id="protocol-associated-type-declaration">
+      protocol-associated-type-declaration</span>
       <span class="arrow"> → </span> 
       <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
-      <a href="#access-level-modifier">access-level-modifier</a><sub class="loosen">opt</sub>
+      <a href="#access-level-modifier">
+      access-level-modifier</a><sub class="loosen">opt</sub>
       <code>associatedtype</code>
       <a href="#typealias-name">typealias-name</a>
-      <a href="#type-inheritance-clause">type-inheritance-clause</a><sub class="loosen">opt</sub>
-      <a href="#typealias-assignment">typealias-assignment</a><sub class="loosen">opt</sub>
-      <a href="#generic-where-clause">generic-where-clause</a><sub class="loosen">opt</sub>
+      <a href="#type-inheritance-clause">
+      type-inheritance-clause</a><sub class="loosen">opt</sub>
+      <a href="#typealias-assignment">
+      typealias-assignment</a><sub class="loosen">opt</sub>
+      <a href="#generic-where-clause">
+      generic-where-clause</a><sub class="loosen">opt</sub>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="typealias-assignment">typealias-assignment</span>
+      <span class="arrow"> → </span> 
+      <code>=</code>
+      <a href="#type">type</a>
     </p>
   </div>
 </div>
@@ -111,7 +166,13 @@ There are five types of protocol requirements:
 [what it is]
 
 <p class="draft item"> </p>
-[what it is]
+[type inheritance]
+
+<p class="draft item"> </p>
+[typealias assignment]
+
+<p class="draft item"> </p>
+[generic where clause]
 
 
 #### Property
@@ -120,12 +181,8 @@ There are five types of protocol requirements:
   <p class="admonition-title">Grammar of a protocol property declaration</p>
   <div class="syntax-group">
     <p class="syntax-def">
-      <span class="name">protocol-member-declaration</span>
-      <span class="arrow"> → </span> 
-      <a href="#protocol-property-declaration">protocol-property-declaration</a>
-    </p>
-    <p class="syntax-def">
-      <span class="name" id="protocol-property-declaration">protocol-property-declaration</span>
+      <span class="name" id="protocol-property-declaration">
+      protocol-property-declaration</span>
       <span class="arrow"> → </span> 
       <a href="#variable-declaration-head">variable-declaration-head</a>
       <a href="#variable-name">variable-name</a>
@@ -135,10 +192,12 @@ There are five types of protocol requirements:
   </div>
   <div class="syntax-group">
     <p class="syntax-def">
-      <span class="name" id="variable-declaration-head">variable-declaration-head</span>
+      <span class="name" id="variable-declaration-head">
+      variable-declaration-head</span>
       <span class="arrow"> → </span> 
       <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
-      <a href="#declaration-modifiers">declaration-modifiers</a><sub class="loosen">opt</sub>
+      <a href="#declaration-modifiers">
+      declaration-modifiers</a><sub class="loosen">opt</sub>
       <code>var</code>
     </p>
     <p class="syntax-def">
@@ -159,15 +218,18 @@ There are five types of protocol requirements:
   </div>
   <div class="syntax-group">
     <p class="syntax-def">
-      <span class="name" id="getter-setter-keyword-block">getter-setter-keyword-block</span>
+      <span class="name" id="getter-setter-keyword-block">
+      getter-setter-keyword-block</span>
       <span class="arrow"> → </span> 
       <code>{</code>
       <a href="#getter-keyword-clause">getter-keyword-clause</a>
-      <a href="#setter-keyword-clause">setter-keyword-clause</a><sub class="loosen">opt</sub>
+      <a href="#setter-keyword-clause">
+      setter-keyword-clause</a><sub class="loosen">opt</sub>
       <code>}</code>
     </p>
     <p class="syntax-def">
-      <span class="name" id="getter-setter-keyword-block">getter-setter-keyword-block</span>
+      <span class="name" id="getter-setter-keyword-block">
+      getter-setter-keyword-block</span>
       <span class="arrow"> → </span> 
       <code>{</code>
       <a href="#setter-keyword-clause">setter-keyword-clause</a>
@@ -178,14 +240,16 @@ There are five types of protocol requirements:
       <span class="name" id="getter-keyword-clause">getter-keyword-clause</span>
       <span class="arrow"> → </span> 
       <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
-      <a href="#mutation-modifier">mutation-modifier</a><sub class="loosen">opt</sub>
+      <a href="#mutation-modifier">
+      mutation-modifier</a><sub class="loosen">opt</sub>
       <code>get</code>
     </p>
     <p class="syntax-def">
       <span class="name" id="setter-keyword-clause">setter-keyword-clause</span>
       <span class="arrow"> → </span> 
       <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
-      <a href="#mutation-modifier">mutation-modifier</a><sub class="loosen">opt</sub>
+      <a href="#mutation-modifier">
+      mutation-modifier</a><sub class="loosen">opt</sub>
       <code>set</code>
     </p>
   </div>
@@ -204,48 +268,140 @@ There are five types of protocol requirements:
 [what it is]
 
 <p class="draft item"> </p>
-[attributes appicable to property]
+[how is it declared]
+
+
+#### Method or Operator Function
+
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a protocol method declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="protocol-method-declaration">
+      protocol-method-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#function-head">function-head</a>
+      <a href="#function-name">function-name</a>
+      <a href="#generic-parameter-clause">
+      generic-parameter-clause</a><sub class="loosen">opt</sub>
+      <a href="#function-signature">function-signature</a>
+    </p>
+  </div>
+</div>
 
 <p class="draft item"> </p>
-[applicable declaration modifiers]
+[what it is]
 
 <p class="draft item"> </p>
-[attributes appicable to type]
+[how is it declared]
 
 <p class="draft item"> </p>
-[inout]
-
-<p class="draft item"> </p>
-[get]
-
-<p class="draft item"> </p>
-[get set]
-
-<p class="draft item"> </p>
-[attributes applicable to get and set]
-
-<p class="draft item"> </p>
-[mutating keyword on get or set]
-
-<p class="draft item"> </p>
-[nonmutating keyword on get or set]
-
-##### Instance
-##### Static
-
-#### Method or Operator
-##### Instance
-##### Static
+[operator free function]
 
 #### Subscript
-##### Instance
-##### Static
+
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a protocol subscript declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="protocol-subscript-declaration">
+      protocol-subscript-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#function-head">subscript-head</a>
+      <a href="#subscript-result">subscript-result</a>
+      <a href="#generic-where-clause">
+      generic-where-clause</a><sub class="loosen">opt</sub>
+      <a href="#getter-setter-keyword-block">getter-setter-keyword-block</a>
+    </p>
+  </div>
+</div>
+
+<p class="draft item"> </p>
+[what it is]
+
+<p class="draft item"> </p>
+[how is it declared]
 
 #### Initializer
 
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a protocol initializer declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="protocol-initializer-declaration">
+      protocol-initializer-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#initializer-head">initializer-head</a>
+      <a href="#generic-parameter-clause">
+      generic-parameter-clause</a><sub class="loosen">opt</sub>
+      <a href="#getter-setter-keyword-block">parameter-clause</a>
+      <code>throws</code><sub>opt</sub>
+      <a href="#generic-where-clause">
+      generic-where-clause</a><sub class="loosen">opt</sub>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="protocol-initializer-declaration">
+      protocol-initializer-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#initializer-head">initializer-head</a>
+      <a href="#generic-parameter-clause">
+      generic-parameter-clause</a><sub class="loosen">opt</sub>
+      <a href="#getter-setter-keyword-block">parameter-clause</a>
+      <code>rethrows</code>
+      <a href="#generic-where-clause">
+      generic-where-clause</a><sub class="loosen">opt</sub>
+    </p>
+  </div>
+</div>
+
+<p class="draft item"> </p>
+[what it is]
+
+<p class="draft item"> </p>
+[how is it declared]
+
 ### Extension
 
+#### Default Implementations
+
+<p class="draft item"> </p>
+[static keyword is used whether the extension will be applied to a reference or value type]
+
+
+
 ### Refinement
+
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a type inheritance list</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="type-inheritance-clause">
+      type-inheritance-clause</span>
+      <span class="arrow"> → </span> 
+      <code>:</code>
+      <a href="#type-inheritance-list">type-inheritance-list</a>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="type-inheritance-list">
+      type-inheritance-list</span>
+      <span class="arrow"> → </span> 
+      <a href="#type-identifier">type-identifier</a>
+      |
+      <a href="#type-identifier">type-identifier</a>
+      <code>,</code>
+      <a href="#type-inheritance-list">type-inheritance-list</a>
+    </p>
+  </div>
+</div>
+
+<p class="draft item"> </p>
+A protocol may be declared to refine another protocol.  The declaration of
+refinement may be made only in the declaration of the protocol, not in an
+extension of the protocol.
+
+<p class="draft item"> </p>
+
+
 
 ### Adoption
 #### Explicit Adoption
@@ -593,12 +749,17 @@ To grammar in other chapters:
   <li id="#type">type</li> 
   <li id="attributes">attributes</li>  
   <li id="access-level-modifier">access-level-modifier</li>
-  <li id="type-inheritance-clause">type-inheritance-clause</li>
+  <li id="type-identifier">type-identifier</li>
   <li id="#generic-where-clause">generic-where-clause</li>
   <li id="#compiler-control-statement">compiler-control-statement</li>
   <li id="#typealias-name">typealias-name</li>
-  <li id="#typealias-assignment">typealias-assignment</li>
   <li id="#declaration-modifiers">declaration-modifiers</li>
+  <li href="#generic-parameter-clause">generic-parameter-clause</li>
+  <li href="#subscript-head">subscript-head</li>
+  <li href="#subscript-result">subscript-result</li>
+  <li href="#function-head">function-head</li>
+  <li href="#initializer-head">initializer-head</li>
+  <li href="#getter-setter-keyword-block">parameter-clause</li>
 </ul>
 
 
