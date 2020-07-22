@@ -362,6 +362,12 @@ There are five types of protocol requirements:
 
 ### Extension
 
+
+
+<p class="draft item"> </p>
+A member of a protocol extension is not a member of the protocol with which the
+extension is associated.
+
 #### Default Implementations
 
 <p class="draft item"> </p>
@@ -395,12 +401,72 @@ There are five types of protocol requirements:
 </div>
 
 <p class="draft item"> </p>
-A protocol may be declared to refine another protocol.  The declaration of
-refinement may be made only in the declaration of the protocol, not in an
-extension of the protocol.
+A protocol `P` may be declared to refine a protocol `O` by including a type 
+inheritance clause in the declaration of `P`.
+
+```swift
+protocol O { var a: Int { get } }
+
+protocol P: O { var b: String { get } }
+```
 
 <p class="draft item"> </p>
+A refinement cannnot be declared in an extension of a protocol.
 
+```swift
+protocol O { var a: Int { get } }
+
+protocol P { var b: String { get } }
+
+extension P: O {} // error: inheritance clause not permitted in extension
+```
+
+<p class="draft item"> </p>
+A protocol declared to refine another protocol, also implicitly refines all
+protocols refined by the latter protocol.
+
+```swift
+protocol O { var a: Int { get } }
+
+protocol P: O { var b: String { get } }
+
+protocol Q: P {} // Q refines both P and O
+```
+
+<p class="draft item"> </p>
+Where a protocol `P` refines another protocol `O`, the members of `O` are 
+accessible in the declaration and extensions of `P`.
+<p class="note">A member of a protocol refined by another protcol does 
+not become a member of the latter protocol.</p>
+
+```swift
+protocol O { 
+  associatedtype T
+  var a: T { get }
+}
+
+protocol P: O {
+  var b: T { get } // T refers to an adopting type's witness for O.T
+}
+
+extension P {
+  var b: T { a } // a refers to an adopting type's witness for O.a
+}
+```
+<p class="draft item"> </p>
+Where a protocol `P` refines another protocol `O`, `P` is not able to declare a
+member of itself that is the same as a member of `O`.  If `P` attempts to 
+override or restate a member of `O`, the behavior is undefined. 
+<p class="note">Although such program arguably is ill-formed, an error usually 
+is not raised by the current implementation of the compiler.  Rather, both the 
+`override` keyword is ignored as well as any restatement of a member.</p>
+<p class="note">The standard library utilizes the <code>override</code> keyword 
+to ___.</p>
+<p class="note">The standard library utilizes the <code>@nonoverride</code> 
+attribute to ___.</p>
+
+<p class="draft item"> </p>
+... to be continued ...
 
 
 ### Adoption
@@ -809,12 +875,34 @@ To grammar in other chapters:
     }
     .draft.item {
       color: red;
-      text-indent: -50px;
     }
     .draft.item:before {
-      content: "DRAFT: " counter(item);
+      content: "" counter(item);
       counter-increment: item;
     }
+    .note {
+      margin-left: 20px;
+      font-style: italic;
+      font-size: 0.8em;
+    }
+    .note:before {
+      content: "Note: ";
+    }
+    .comment {
+      margin-left: 20px;
+      font-style: italic;
+      font-size: 0.8em;
+    }
+    .comment:before {
+      content: "Comment: ";
+    }
+    p>code {
+      font-size: 1.0em;
+    }
+    .language-swift {
+      margin-top: 1.0em;
+    }
+
   </style>
 </head>
 
