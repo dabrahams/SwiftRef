@@ -14,8 +14,9 @@ protocol may gain default and other functionality via [extensions](#extension)
 of the protocol. Protocols may be declared in a hierarchy, with one protocol 
 being a [refinement](#refinement) of another protocol.
 
-### Declaration
 
+### Declaration
+---
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a protocol declaration</p>
   <div class="syntax-group">
@@ -106,11 +107,17 @@ being a [refinement](#refinement) of another protocol.
 [type inheritance clause]
 
 <p class="draft item"> </p>
+[typealias member]
+
+<p class="draft item"> </p>
 [generic where clause versus typealias declaration]
+
+<p class="draft item"> </p>
+meaning of Self and self
 
 
 ### Requirements
-
+---
 <p class="draft item"> </p>
 There are five types of protocol requirements:
 * `associatedtype`
@@ -121,6 +128,9 @@ There are five types of protocol requirements:
 
 <p class="draft item"> </p>
 [what a requirement is]
+
+<p class="draft item"> </p>
+[note the concept of a requirement being a customization point]
 
 <p class="draft item"> </p>
 [applicbale attributes]
@@ -360,9 +370,10 @@ There are five types of protocol requirements:
 <p class="draft item"> </p>
 [how is it declared]
 
+
 ### Extension
-
-
+---
+This section concerns the role played by extensions relative to protocols.
 
 <p class="draft item"> </p>
 A member of a protocol extension is not a member of the protocol with which the
@@ -374,8 +385,10 @@ extension is associated.
 [static keyword is used whether the extension will be applied to a reference or value type]
 
 
-
 ### Refinement
+---
+This section concerns the refinement relationship that may exist between 
+protocols.
 
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a type inheritance list</p>
@@ -401,8 +414,8 @@ extension is associated.
 </div>
 
 <p class="draft item"> </p>
-A protocol `P` may be declared to refine a protocol `O` by including a type 
-inheritance clause in the declaration of `P`.
+A protocol `P` may be declared to refine a protocol `O` by including a `: O` 
+type  inheritance clause in the declaration of `P`.
 
 ```swift
 protocol O { var a: Int { get } }
@@ -453,15 +466,19 @@ extension P {
   var b: T { a } // a refers to an adopting type's witness for O.a
 }
 ```
+
 <p class="draft item"> </p>
 Where a protocol `P` refines another protocol `O`, `P` is not able to declare a
 member of itself that is the same as a member of `O`.  If `P` attempts to 
 override or restate a member of `O`, the behavior is undefined. 
+
 <p class="note">Although such program arguably is ill-formed, an error usually 
 is not raised by the current implementation of the compiler.  Rather, both the 
 `override` keyword is ignored as well as any restatement of a member.</p>
+
 <p class="note">The standard library utilizes the <code>override</code> keyword 
 to ___.</p>
+
 <p class="note">The standard library utilizes the <code>@nonoverride</code> 
 attribute to ___.</p>
 
@@ -469,28 +486,160 @@ attribute to ___.</p>
 ... to be continued ...
 
 
+### Composition
+---
+
+This section concerns the composition of protocols.
+
+<p class="draft item"> </p>
+... to be continued ...
+
+### Class-Only Protocols
+---
+This section concerns protocols capable of adoption only by class types.
+
+<p class="draft item"> </p>
+... to be continued ...
+
+
+### Objective-C Protocols
+---
+This section concerns protocol interoperation with Objective-C.
+
+<p class="draft item"> </p>
+... to be continued ...
+
 ### Adoption
-#### Explicit Adoption
-#### Implicit Adoption
-##### Lesser-Refined Protocols
-##### Tuples
+---
+This section concerns the adoption of a protocol by a type.
 
+<p class="draft item"> </p>
+Any struct, enum or class [satisfying](#conformance) the requirements of a 
+protocol may be declared to adopt the protocol.
 
+<p class="draft item"> </p>
+Types other than structs, enums and classes cannot be *declared* to adopt a 
+protocol.
 
+<p class="draft item"> </p>
+Where type `T` [satisfies](#conformance) the requirements of protocol `P`, `T` 
+may unconditionally adopt `P` by including a `: P` 
+[type  inheritance clause](#type-inheritance-clause) in the declaration of `T` 
+or in any extension of `T`.
 
+```swift
+protocol P { var a: Int { get } } // requirement M
 
+struct S: P { var a: Int { 42 } } // M satisfied; adoption declared
 
+class C { let a: Int } // M satisfied
+extension C: P {} // adoption declared
 
+enum E {}
+extension E: P { var a: Int { 42 } } // M satisfied; adoption declared
+```
 
+<p class="draft item"> </p>
+Where type `T` [satisfies](#conformance) the requirements of protocol `P`, 
+`T` may conditionally adopt `P` by including a `: P` 
+[type  inheritance clause](#type-inheritance-clause) and a 
+[generic where clause](#generic-where-clause) in the declaration of `T` or in 
+any extension of `T`.
 
+```swift
+protocol P {}
 
+struct S<T> {}
+extension S: P where T: Numeric {}
+```
 
+<p class="draft item"> </p>
+Where a protocol `P` refines a protocol `O` and type `T` is declared to adopt 
+`P`, for the adoption of `P` to be valid, `T` must [satisfy](#conformance) 
+the requirements of both `P` and `O`.
 
+```swift
+protocol O { var a: Int { get } } // requirement M
 
+protocol P: O {}
 
+struct S {} // M not satisfied
+extension S: P {} // error: struct S does not conform to protocol O
+```
+
+<p class="draft item"> </p>
+Where a protocol `P` refines a protocol `O`, a type `T` 
+[satisfies](#conformance) the requirements of `O` and `P`, and `T` 
+unconditionally is declared to adopt `P`, `T` implicilty adopts `O` 
+unconditionally.
+
+```swift
+protocol O { var a: Int { get } } // requirement M
+
+protocol P: O {}
+
+struct S { var a: Int { 1 } } // M satisfied
+extension S: P {} // adoption of P declared; adoption of O implied
+```
+
+<p class="draft item"> </p>
+Where a protocol `P` refines a protocol `O`, type `T` [satisfies](#conformance) 
+the requirements of `O` and `P`, and `T` declares adoption of 
+`P` subject to conditions *C*, `T` also must delcare adoption of `O` 
+subject to conditions that are a superset of *C*, otherwise the program is
+ill-formed.
+
+```swift
+protocol O {}
+
+protocol P: O {}
+
+struct S<T> {}
+extension S: P where T: SignedNumeric {}
+extension S: O where T: Numeric {} // SignedNumeric refines Numeric
+// T: SignedNumeric ⊆ T: Numeric
+
+struct X<T> {}
+extension S: P, O where T == Int {}
+// T == Int ⊆ T == Int
+
+struct Y<T>: O {}
+extension Y: P where T: Equatable {}
+// T: Equatable ⊆ universal set
+```
+
+<p class="draft item"> </p>
+Where all members of a tuple type adopt a standard library protocol of 
+`Equatable`, `Hashable` or `Comparable`, the tuple type implicitly adopts such 
+protocol, and the conformance of the tuple type to the requirements of such
+protocol is synthesized. 
+
+In the following example, since `Int: Equatable` and `String: Equatable`, 
+`(Int, String)` implicitly adopts `Equatable`, and 
+`static func ==(lhs:rhs:)` is synthized for `(Int, String)`.
+
+```swift
+let b: (Int, String) = (1, "one")
+b == (1, "one") // true
+```
+
+In the following example, since both `Int` and `String` conform
+to `Comparable`, the tuple type `(Int, String)` implicitly adopts `Comparable`, 
+and `static func <(lhs:rhs:)` is synthesized. The standard library's 
+`Sequence` protocol conditionally declares a `sorted()` method 
+where the `Element` type of a conforming type conforms to `Comparable` (the 
+`sorted()` method depends upon the availability of the `<` operator).
+Since `(Int, String)` implicitly adopts `Comparable` and is the `Element` type of 
+`Array<(Int, String)>`, which conforms to `Sequence`, `Array<(Int, String)>` 
+makes the `sorted()`method available.
+
+```swift
+var a: [(Int, String)] = [(2, "two"), (1, "one")]
+print(a.sorted()) // "(1, "one"), (2, "two")"
+```
 
 ### Conformance
-
+---
 <p class="draft item"> </p>
 In a given scope, a concrete type `T` **conforms** to a protocol `P` if and only if:
 - `T` is a nominal type and the conformance is implied [<-- link to section on how this implication is
@@ -801,14 +950,45 @@ print(x.id) // (a2) "Q_Numeric"
 print(getId(of: x)) // "P"
 ```
 
+<p class="draft item"> </p>
+[... add [synthesized conforamce]
+(https://docs.swift.org/swift-book/LanguageGuide/Protocols.html#ID627) 
+to Equatable, Hashable and Comparable]
+
+<p class="draft item"> </p>
+[... add synthesized memberwise initializer being available as witness]
+
+<p class="draft item"> </p>
+[... synth of allCases where CaseIterable present]
+
+
+
+
 
 ### References
-
-1. Suyash Srijan, *[Protocol Witness Matching Mini-Manifesto]*(https://forums.swift.org/t/protocol-witness-matching-mini-manifesto/32752)
+---
+1. *The Swift Programming Language*, [Guide: Protocols](https://docs.swift.org/swift-book/LanguageGuide/Protocols.html)
+1. *The Swift Programming Language*, [Protocol Declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID369)
+1. Swift Evolution Repository, [SE-0011: Replace typealias keyword with associatedtype for associated type declarations](https://github.com/apple/swift-evolution/blob/master/proposals/0011-replace-typealias-associated.md)
+1. Swift Evolution Repository, [SE-0070: Make Optional Requirements Objective-C-only](https://github.com/apple/swift-evolution/blob/master/proposals/0070-optional-requirements.md)
+1. Swift Evolution Repository, [SE-0091: Improving operator requirements in protocols](https://github.com/apple/swift-evolution/blob/master/proposals/0091-improving-operators-in-protocols.md)
+1. Swift Evolution Repository, [SE-0092: Typealiases in protocols and protocol extensions](https://github.com/apple/swift-evolution/blob/master/proposals/0092-typealiases-in-protocols.md)
+1. Swift Evolution Repository, [SE-0095: Replace protocol\<P1,P2> syntax with P1 & P2 syntax](https://github.com/apple/swift-evolution/blob/master/proposals/0095-any-as-existential.md)
+1. Swift Evolution Repository, [SE-0142: Permit where clauses to constrain associated types](https://github.com/apple/swift-evolution/blob/master/proposals/0142-associated-types-constraints.md)
+1. Swift Evolution Repository, [SE-0143: Conditional Conformances](https://github.com/apple/swift-evolution/blob/master/proposals/0143-conditional-conformances.md)
+1. Swift Evolution Repository, [SE-0156: Class and Subtype existentials](https://github.com/apple/swift-evolution/blob/master/proposals/0156-subclass-existentials.md)
+1. Swift Evolution Repository, [SE-0157: Support recursive constraints on associated types](https://github.com/apple/swift-evolution/blob/master/proposals/0157-recursive-protocol-constraints.md)
+1. Swift Evolution Repository, [SE-0164: Remove final support in protocol extensions](https://github.com/apple/swift-evolution/blob/master/proposals/0164-remove-final-support-in-protocol-extensions.md)
+1. Swift Evolution Repository, [SE-0185: Synthesizing Equatable and Hashable conformance](https://github.com/apple/swift-evolution/blob/master/proposals/0185-synthesize-equatable-hashable.md)
+1. Swift Evolution Repository, [SE-0186: Remove ownership keyword support in protocols](https://github.com/apple/swift-evolution/blob/master/proposals/0186-remove-ownership-keyword-support-in-protocols.md)
+1. Swift Evolution Repository, [SE-0266: Synthesized Comparable conformance for enum types](https://github.com/apple/swift-evolution/blob/master/proposals/0266-synthesized-comparable-for-enumerations.md)
+1. Swift Evolution Repository, [SE-0280: Enum cases as protocol witnesses](https://github.com/apple/swift-evolution/blob/master/proposals/0280-enum-cases-as-protocol-witnesses.md)
+1. Swift Evolution Repository, [SE-0283: Tuples Conform to Equatable, Comparable, and Hashable](https://github.com/apple/swift-evolution/blob/master/proposals/0283-tuples-are-equatable-comparable-hashable.md)
+1. Suyash Srijan, [Protocol Witness Matching Mini-Manifesto](https://forums.swift.org/t/protocol-witness-matching-mini-manifesto/32752)
 
 
 ### Temporary Link Targets
-
+---
 To grammar in other chapters:
 <ul>
   <li id="identifier">identifier</li>
