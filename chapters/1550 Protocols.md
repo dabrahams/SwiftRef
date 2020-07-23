@@ -640,8 +640,40 @@ print(a.sorted()) // "(1, "one"), (2, "two")"
 
 ### Conformance
 ---
+
+A protocol **conformance** of type `T` to protocol `P` is a triple 
+(`T`, `P`, *M*), where *M* is a mapping from each requirement *r* of `P` 
+onto a corresponding **witness** that satisfies *r* for `T`.
+
+|-|-|
+| Requirement | Witness |
+|-|-|
+| `associatedtype` | concrete type referenced by `T` |
+| `var` | instance property of `T` |
+| `static var` | `static` or `class` property of `T`; and, where `T` is an `enum`, an `enum` case |
+| `func` | instance method of `T` |
+| `static func` | `static` or `class` method of `T`; and, where `T` is an `enum`, an `enum` case; and, where the function name is an operator, a concrete module-scope operator function |
+| `subscript` | instance subscript of `T` |
+| `static subscript` | `static` or `class` subscript of `T` |
+| `init` | initializer of `T` |
+
+This section describes how a conformance's mapping from requirements to 
+witnesses is determined.
+
+#### Satisfaction of Requirements
 <p class="draft item"> </p>
-In a given scope, a concrete type `T` **conforms** to a protocol `P` if and only if:
+In a given scope, a type `T` satisfies a requirements of a protocol `P`
+
+<p class="draft item"> </p>
+In certain cases, the adoption by a type of a protocol will result in synthesis 
+of a  witness for a requirement of the protocol, if a witness is not otherwise
+available for the requirement.  [list the cases of synthesis...]
+
+
+
+<p class="draft item"> </p>
+In a given scope, a concrete type `T` **conforms** to a protocol `P` if and 
+only if:
 - `T` is a nominal type and the conformance is implied [<-- link to section on how this implication is
   determined] by a
   *[type-inheritance-clause](https://docs.swift.org/swift-book/ReferenceManual/Types.html#grammar_type-inheritance-clause)* 
@@ -652,14 +684,6 @@ In a given scope, a concrete type `T` **conforms** to a protocol `P` if and only
 A protocol **conformance** of `T` to `P` is a triple (`T`, `P`, *M*), where *M* is a mapping from
 each requirement *r* of `P` onto a corresponding **witness** that satisfies [<--link to requirement satisfaction] *r* for `T`.   
 
-| Requirement | Witness |
-|-|-|
-| associated type | concrete type nested in `T` |
-| non-`static` method | non-`static`, non-`class` method of `T` |
-| non-operator `static` method | `static` or `class` method of `T`, or an `enum` case as described in [section describing that horrible new feature] |
-| static operator | `static` or `class` operator of `T`, or a concrete module-scope operator |
-
-This chapter describes how a conformance's mapping from requirements to witnesses is determined.
 
 #### Creation of a Conformance
 A **protocol conformance** is the set of witnesses used by a concrete type to satisfy the requirements of a 
