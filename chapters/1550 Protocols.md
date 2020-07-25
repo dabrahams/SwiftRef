@@ -641,7 +641,7 @@ print(a.sorted()) // "(1, "one"), (2, "two")"
 ### Conformance
 ---
 
-A protocol **conformance** of type `T` to protocol `P` is a triple 
+A (protocol) **conformance** of type `T` to protocol `P` is a triple 
 (`T`, `P`, *M*), where *M* is a mapping from each requirement *r* of `P` 
 onto a corresponding **witness** that satisfies *r* for `T`.
 
@@ -1109,4 +1109,3 @@ To grammar in other chapters:
 
   </style>
 </head>
-
