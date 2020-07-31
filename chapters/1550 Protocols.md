@@ -1103,7 +1103,7 @@ ambiguity results, include, for example:
 _i2_ is delcared in an extension of another protocol, and
 neither protocol refines the other protocol;
 - _i1_ and _i2_ are both declared on the same type or the same protocol
-with disjoint conditions;
+with disjoint conditions; **[is this even possible???]**
 - ...
 
 <p class="draft item"> </p>
