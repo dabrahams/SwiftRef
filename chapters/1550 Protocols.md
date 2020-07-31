@@ -6,8 +6,8 @@
 <p class="draft item"> </p>
 A protocol is a set of [requirements](#requirements) enabling a uniform means of 
 accessing functionality on adopting types. A class, structure or 
-enumeration satisfying the requirements of a protocol may [adopt](#adoption) the 
-protocol, in which case, the type can be accessed through its 
+enumeration satisfying the requirements of a protocol may [adopt](#adoption) a 
+protocol, in which case, the type may be accessed through its 
 [conformance](#conformance) to the protocol.  A type's conformance to a protocol
 consists of one [witness](#witness) for each requirement.  A type adopting a 
 protocol may gain default and other functionality via [extensions](#extension) 
@@ -34,6 +34,8 @@ being a [refinement](#refinement) of another protocol.
       generic-where-clause</a><sub class="loosen">opt</sub>
       <a href="#protocol-body">protocol-body</a>
     </p>
+  </div>
+  <div class="syntax-group">
     <p class="syntax-def">
       <span class="name" id="protocol-name">protocol-name</span>
       <span class="arrow"> → </span> 
@@ -94,6 +96,12 @@ being a [refinement](#refinement) of another protocol.
       <a href="#protocol-initializer-declaration">
       protocol-initializer-declaration</a>
     </p>
+    <p class="syntax-def">
+      <span class="name">protocol-member-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#protocol-typealias-declaration">
+      protocol-typealias-declaration</a>
+    </p>
   </div>
 </div>
 
@@ -118,6 +126,9 @@ meaning of Self and self
 
 ### Requirements
 ---
+This section discusses each type of (protocol) requirement, how each is 
+declared, and the types of declarations that may satisfy each requirement.
+
 <p class="draft item"> </p>
 There are five types of protocol requirements:
 * `associatedtype`
@@ -133,13 +144,27 @@ There are five types of protocol requirements:
 [note the concept of a requirement being a customization point]
 
 <p class="draft item"> </p>
-[applicbale attributes]
+[applicbale attributes] [attributes are part of requierment's specification, not a modification of the declaration]
 
 <p class="draft item"> </p>
-[permitted use of access level modifiers]
+[access level modifiers]
+
+<p class="draft item"> </p>
+[other declaration modifiers]
 
 
-#### Associated Type
+A **protocol requirement** *m* is a statement in the declaration of a protocol that a type declared to conform 
+to the protocol must have a member satisfying *m*.
+
+If one protocol refines another protocol, the requirements of the latter are not part of the requirements of 
+the former.  The requirements of a protocol are not overridden by a protocol that refines the protocol.  Thus, 
+the conformances formed by a refining protocol do not include witnesses for requirements of the refined protocol.
+
+#### Associated Type Requirement
+
+A [protocol-associated-type-declaration](#protocol-associated-type-declaration) 
+is also known as an `associatedtype` requirement or an associated type 
+requirement. 
 
 <div class="admonition grammar">
   <p class="admonition-title">
@@ -176,6 +201,13 @@ There are five types of protocol requirements:
 [what it is]
 
 <p class="draft item"> </p>
+While the grammar of a protocol-associated-type-declaration includes an
+[access-level-modifier](#access-level-modifier), it appears that the current
+implementation of the compiler does not allow an access-level-modifier to be
+applied to a protocol-associated-type-declaration. 
+
+
+<p class="draft item"> </p>
 [type inheritance]
 
 <p class="draft item"> </p>
@@ -185,7 +217,15 @@ There are five types of protocol requirements:
 [generic where clause]
 
 
-#### Property
+#### Property Requirement
+
+A [protocol-property-declaration](#protocol-property-declaration) is also known
+as a `var` requirement or a property requirement. 
+
+<p class="draft item"> </p>
+A property requirement _r_ of a protocol `P` is a requirement that a type 
+adopting `P` must have a property satisfying _r_, with such property visible 
+in the scope of the adoption.
 
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a protocol property declaration</p>
@@ -275,13 +315,133 @@ There are five types of protocol requirements:
 </div>
 
 <p class="draft item"> </p>
-[what it is]
+**Permitted Declaration Modifiers**.   
+In the declaration of a property 
+requirement, the permitted [declaration-modifiers](#declaration-modifiers) 
+are `static` and `dynamic`. Any other declaration-modifier is not allowed.
 
 <p class="draft item"> </p>
-[how is it declared]
+**Permitted Attributes**.   
+In the declaration of a property requirement, the 
+permitted [attributes](#attributes) are the same attributes permitted in a 
+[variable-declaration](#variable-declaration). ***check this statement***
+
+<p class="draft item"> </p>
+**Type Annotation**.   
+In the declaration of a property requirement, the 
+formulation of the [type-annotation](#type-annotation) is the same as 
+the formulation of the type-annotation applicable 
+in the case of a [variable-declaration](#variable-declaration). 
+***check this statement***
+
+<p class="draft item"> </p>
+**Satisfaction by Variable Declaration**.   
+In the scope in which a type `T` 
+[adopts](#adoption) a protocol `P`, a 
+[variable-declaration](#variable-declaration) _v_ visible on `T` satisfies 
+a `var` requirement _r_ of `P` where _r_ the [attributes](#attributes), 
+[declaration-modifiers](#declaration-modifiers), 
+[identifier](#identifier) and [type-annotation](#type-annotation) of _v_ 
+all match the corresponding attributes, declaration-modifiers, identifier and 
+type-annotation of _r_.
+
+<p class="draft item"> </p>
+**Satisfaction by Constant Declaration**.   
+In the scope in which a type `T` 
+[adopts](#adoption) a protocol `P`, a 
+[constant-declaration](#constant-declaration) _c_ visible on `T` satisfies 
+a `var` requirement _r_ of `P` where the 
+[attributes](#attributes), [declaration-modifiers](#declaration-modifiers), 
+[identifier](#identifier) and [type-annotation](#type-annotation) of _c_ 
+all match the corresponding attributes, declaration-modifiers, identifier and 
+type-annotation of _r_ and _r_ does not include a 
+[setter-keyword-clause](#setter-keyword-clause).
+
+<p class="draft item"> </p>
+**Satisfaction by Enum Case**.  
+Beginning with Swift 5.3, 
+in the scope in which an enum `E`[adopts](#adoption) a protocol `P`, 
+a [union-value-style-enum-case](#union-value-style-enum-case) _u_ visible on `E`
+satisfies a `var` requirement _r_ of `P`where: 
+* the [identifier](#identifier) of _u_ matches the identifier of _r_;
+* _u_ does not include any [associated values](#associated values) (i.e., no 
+[tuple-type](#tuple-type));
+* _r_ does not include a [setter-keyword-clause](#setter-keyword-clause); and
+* _r_ includes: 
+    - no [attributes](#attributes), 
+    - a single [declaration-modifier](#declaration-modifiers) of `static`, and 
+    - a [type-annotation](#type-annotation) with: 
+        1. no attributes, 
+        2. no `inout` keyword, and
+        3. a [type](#type) of `Self`, `E` or a `typealias` for `E`.
+
+<p class="draft item"> </p>
+[say this better:]
+The attributes 
+of a `var` requirement 
+match 
+the attributes
+of a constant-declaration or variable-declaration
+where
+the sets of attributes are equal.
+The ordering of the attributes is irrelevant.
+***check this statement***
+
+<p class="draft item"> </p>
+[say this better:]
+The declaration-modifiers 
+of a `var` requirement 
+match 
+The declaration-modifiers 
+of a constant-declaration or variable-declaration
+where
+the sets of attributes are equal.
+The ordering of the declaration-modifiers is irrelevant.
+***check this statement***
+
+<p class="draft item"> </p>
+The declaration-modifier `static` 
+as used in the declaration of a protocol requirement 
+can be matched 
+by either the `static` or `class` declaration-modifier 
+of a constant-declaration or variable-declaration.
+
+<p class="draft item"> </p>
+[say this better:]
+Two [indentifiers](#identifier) are equal if and only if their respective 
+UTF-32 representations are equal.
+
+<p class="draft item"> </p>
+[say this better:] A [type-annotation](#type-annotation) declared within _i_ 
+matches a type-annontation declared within _r_ if the set of attributes are the 
+same, the inout keyword is present in both or omitted from both, and the type 
+is equivalent.
+
+<p class="draft item"> </p>
+[say this better:] When matching to protocol requirements, types are equivalent 
+if ________.  
+Where a [type](#type) `T` 
+of a [type-annotation](#type-annotation) 
+of a `var` requirement 
+of a protocol `P`
+is 
+a [type-identifier](#type-identifier)
+that refers 
+to the [typealias-name](#typealias-name) 
+of an `associatedtype` requirement
+declared on `P` or a protocol [refined](#refinement) by `P`,
+`T` can be matched 
+by `T`, or
+a type-alias for `T`, or 
+the type that is the witness for the `associatedtype` requirement, or
+a type-alias for the type that is the witness for the `associatedtype` 
+requirement.
 
 
-#### Method or Operator Function
+#### Method or Operator Requirement
+
+A [protocol-method-declaration](#protocol-method-declaration) is also known
+as a `func` requirement or a method requirement or an operator requirement. 
 
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a protocol method declaration</p>
@@ -308,7 +468,10 @@ There are five types of protocol requirements:
 <p class="draft item"> </p>
 [operator free function]
 
-#### Subscript
+#### Subscript Requirement 
+
+A [protocol-subscript-declaration](#protocol-subscript-declaration) is also 
+known as a `subscript` requirement or a subscript requirement.
 
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a protocol subscript declaration</p>
@@ -317,7 +480,7 @@ There are five types of protocol requirements:
       <span class="name" id="protocol-subscript-declaration">
       protocol-subscript-declaration</span>
       <span class="arrow"> → </span> 
-      <a href="#function-head">subscript-head</a>
+      <a href="#subscript-head">subscript-head</a>
       <a href="#subscript-result">subscript-result</a>
       <a href="#generic-where-clause">
       generic-where-clause</a><sub class="loosen">opt</sub>
@@ -332,7 +495,10 @@ There are five types of protocol requirements:
 <p class="draft item"> </p>
 [how is it declared]
 
-#### Initializer
+#### Initializer Requirement
+
+A [protocol-initializer-declaration](#protocol-initializer-declaration) is also 
+known as an `init` requirement or an initializer requirement.
 
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a protocol initializer declaration</p>
@@ -344,7 +510,7 @@ There are five types of protocol requirements:
       <a href="#initializer-head">initializer-head</a>
       <a href="#generic-parameter-clause">
       generic-parameter-clause</a><sub class="loosen">opt</sub>
-      <a href="#getter-setter-keyword-block">parameter-clause</a>
+      <a href="#parameter-clause">parameter-clause</a>
       <code>throws</code><sub>opt</sub>
       <a href="#generic-where-clause">
       generic-where-clause</a><sub class="loosen">opt</sub>
@@ -356,7 +522,7 @@ There are five types of protocol requirements:
       <a href="#initializer-head">initializer-head</a>
       <a href="#generic-parameter-clause">
       generic-parameter-clause</a><sub class="loosen">opt</sub>
-      <a href="#getter-setter-keyword-block">parameter-clause</a>
+      <a href="#parameter-clause">parameter-clause</a>
       <code>rethrows</code>
       <a href="#generic-where-clause">
       generic-where-clause</a><sub class="loosen">opt</sub>
@@ -522,6 +688,21 @@ Types other than structs, enums and classes cannot be *declared* to adopt a
 protocol.
 
 <p class="draft item"> </p>
+A generic form of a struct, enum or class 
+declared to adopt a protocol
+does not itself adopt the protocol.
+Nevertheless, the generic type
+must satisfy all requirements of the protocol 
+regardless of whether a concretization of the generic type is formed, 
+otherise the program is ill-formed.  
+
+<p class="draft item"> </p>
+Where a generic type `X` 
+is declared to adopt a protocol `P`, 
+a concretization of `X` 
+adopts `P`. 
+
+<p class="draft item"> </p>
 Where type `T` [satisfies](#conformance) the requirements of protocol `P`, `T` 
 may unconditionally adopt `P` by including a `: P` 
 [type  inheritance clause](#type-inheritance-clause) in the declaration of `T` 
@@ -642,17 +823,17 @@ print(a.sorted()) // "(1, "one"), (2, "two")"
 ---
 
 A protocol **conformance** of type `T` to protocol `P` is a triple 
-(`T`, `P`, *M*), where *M* is a mapping from each requirement *r* of `P` 
-onto a corresponding **witness** that satisfies *r* for `T`.
+(`T`, `P`, _M_), where _M_ is a mapping from each requirement _r_ of `P` 
+onto a corresponding **witness** that satisfies _r_ for `T`.
 
 |-|-|
 | Requirement | Witness |
 |-|-|
-| `associatedtype` | concrete type referenced by `T` |
+| `associatedtype` | concrete type in the scope of `T` |
 | `var` | instance property of `T` |
-| `static var` | `static` or `class` property of `T`; and, where `T` is an `enum`, an `enum` case |
+| `static var` | `static` or `class` property of `T`, or also, where `T` is an `enum`, an `enum` case |
 | `func` | instance method of `T` |
-| `static func` | `static` or `class` method of `T`; and, where `T` is an `enum`, an `enum` case; and, where the function name is an operator, a concrete module-scope operator function |
+| `static func` | `static` or `class` method of `T`, or also, where `T` is an `enum`, an `enum` case, or also, where the function name is an operator, a concrete module-scope operator function |
 | `subscript` | instance subscript of `T` |
 | `static subscript` | `static` or `class` subscript of `T` |
 | `init` | initializer of `T` |
@@ -660,9 +841,140 @@ onto a corresponding **witness** that satisfies *r* for `T`.
 This section describes how a conformance's mapping from requirements to 
 witnesses is determined.
 
-#### Satisfaction of Requirements
+#### Witness
+
 <p class="draft item"> </p>
-In a given scope, a type `T` satisfies a requirements of a protocol `P`
+Where _r_ is a requirement of a protocol `P` and a type `T` adopts `P`, 
+the **witness** of _r_ for `T: P` is the property, method, function, enum case, 
+type, subscript or initializer that serves as `T`'s implementation of _r_.  
+
+<p class="draft item"> </p>
+For a given requirement of a conformance, the identity of the witness for such
+requirement is immutable.
+
+<p class="draft item"> </p>   
+Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and a 
+given property, method, enum case, type, subscript or initializer of
+`T` **satisfies** _r_, such property, method, enum case, type, 
+subscript or initializer is an implementation of _r_, and is eligible to be the
+witness for _r_.
+
+<p class="draft item"> </p> 
+Where _r_ is a `static func` requirement of a protocol `P`, the 
+[function-name](#function-name) of _r_ is an [operator](#operator), a type `T` 
+adopts `P`, and in the scope in which `T` adopts `P` there exists a concrete 
+module-scope operator function _f_ that **satisfies** _r_, _f_ is an 
+implementation of _r_, and is eligible to be the witness for _r_.
+
+```swift
+func <(lhs: G1, rhs: G1) -> G1 { G1() }
+
+protocol G { static func <(lhs: Self, rhs: Self) -> Self }
+
+struct G1: G {}
+```
+
+<p class="draft item"> </p> 
+Where _r_ is a requirement of a protocol `P`, and a type `T` adopts `P`, there
+may exist more then implemenation of _r_ eligible to be the witness for _r_.
+
+<p class="draft item"> </p> 
+Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and
+there exists one and only one implemenation of _r_ eligible to be the witness 
+for _r_, such implementation is the witness for _r_.
+
+<p class="draft item"> </p> 
+Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and
+there exists more than one implemenation of _r_ eligible to be the witness 
+for _r_, the implementation that is the witness for _r_
+is determined according to the criteria in _________.
+
+
+
+
+
+
+#### Visible
+
+In a given scope, the sources from which a type `T` may provide a an 
+implementation of a requirement _r_ of a protocol `P`include: 
+[refine to deal with visibility and access control levels]
+  1. the members of the declaration of `T`;
+  1. the members of any extension of `T`;
+  1. the members of any visible extension of any protocol explicitly or 
+  implicitly adopted by `T`;
+  1. where `T` is a class, the members of the declaration of `T`, or any 
+  extension, of any superclass of `T`;
+  1. where _r_ is a `func` requirement with an operator as the function name,
+a concrete module-scope operator function; or
+  1. where applicable to `T: P`, a compiler-synthesized member of `T`;
+  1. [others?]
+
+
+
+
+A type `T` satisfies an `associatedtype` requirement _r_ of a protocol `P`
+where, in the scope in which `T` adopts `P`,  
+
+
+
+A. declared as:
+  1. a member of the declaration of `T`;
+  1. a member of an extension of `T`;
+  1. a member of an extension of any protocol explicitly or implicitly adopted 
+by `T`;
+  1. where `T` is a class, a member of the declaration, or any extension, of any 
+superclass of `T`;
+  1. where _r_ is a `func` requirement with an operator as the function name,
+a concrete module-scope operator function; or
+  1. where applicable to `T: P`, a compiler-synthesized member of `T`; or
+
+B. where _r_ is an `associatedtype`, a type that is declared in `T` (or an 
+extension of `T`) to be the _____ of a `typealias` for the name of 
+the `associatedtype`; or
+
+C. where _r_ is an `associatedtype` and another requirement of `P` uses the 
+name of the `associatedtype` as the type in a:
+  1. [type-annotation](#type-annotation) of a 
+[protocol-property-declaration](#protocol-property-declaration), or
+
+  1. [type-annotation](#type-annotation) of a [parameter](#parameter) of a 
+[function-signature] of a 
+[protocol-method-declaration](#protocol-method-declaration), or
+  1. [type](#type) of a [function-result] of a
+[protocol-method-declaration](#protocol-method-declaration), or
+  1. [type-annotation](#type-annotation) of a [parameter](#parameter) of a 
+[protocol-method-declaration](#protocol-method-declaration), or
+  1. [type](#type) of a [type-identifier] of a [generic-parameter] of a 
+[protocol-method-declaration](#protocol-method-declaration), or
+  1. [type](#type) of a [type-identifier] of a [requirement](#requirement) of a 
+[generic-where-clause](#generic-where-clause) of a 
+[protocol-method-declaration](#protocol-method-declaration), or
+
+  1. [type-annotation](#type-annotation) of a [parameter](#parameter) of a 
+[subscript-head](#subscript-head) of a [protocol-subscript-declaration], or
+  1. [type](#type) of a [subscript-result](#subscript-result) of a 
+[protocol-subscript-declaration], or
+  1. vvv
+
+
+
+
+
+a return type, a parameter type or generic-parameter-type
+
+inferred to satisfy the `associatedtype` requirement by virtue of `T`'s
+witness for another requirement of `P`, 
+type of a return type, a parameter type or generic-parameter-type
+
+used in 
+
+
+
+
+
+
+#### Satisfaction of Requirements
 
 <p class="draft item"> </p>
 In certain cases, the adoption by a type of a protocol will result in synthesis 
@@ -686,23 +998,34 @@ each requirement *r* of `P` onto a corresponding **witness** that satisfies [<--
 
 
 #### Creation of a Conformance
-A **protocol conformance** is the set of witnesses used by a concrete type to satisfy the requirements of a 
-protocol.  The syntactic declaration, `T: P`, that type `T` conforms to protocol `P` is separate and distinct 
-from the determination of the set of witnesses that is a conformance.  The substance of a conformance is not 
-declared.  It is created in response to a type being declared to conform to a protocol.  The set of witnesses 
-that is a conformance is inferred from the context.
 
-For a type `T` to conform to a protocol `P`, `T` must be declared to conform to `P`, and `T` must have at 
-least one implementation for each protocol requirement of `P`.  A named concrete type is declared to conform to 
-a protocol in one of two ways.  A non-generic concrete type is expressly declared to conform to a protocol.  A 
-concretization of a generic type is implicitly declared to conform to a protocol based on the pattern established 
-by the generic type's declaration and extensions.
+<p class="draft item"> </p>
+Where a nominal or non-nominal concrete type `T` adopts a protocol `P`, 
+a conformance is created for `X: P`.
 
-><sub>***Conretization of a Generic Type**
->A concretization of a generic type is a specialized version of the generic type formed by replacing the generic 
- type's type parameters with concrete type arguments.  A generic type may specify that its concretizations will 
- conform, or conditionally may conform, to one or more protocols, which establishes a pattern for protocol 
- conformance.  When a concretization is formed, its protocol conformances are determined by that pattern.*</sub>
+<p class="draft item"> </p>
+Where a generic type declares adoption of a protocol `P`,
+the generic type itself does not adopt `P`, and
+thus no conformance is created.
+
+<p class="draft item"> </p>
+Where a generic type `X` is declared to adopt a protocol `P` and 
+a [concretization](#concretization) of `X<T>` is formed, 
+`X<T>` adopts `P`, and
+thus a conformance is created for `X<T>: P`.
+
+<p class="draft item"> </p>
+The mapping _M_ from each requirement _r_ of `P` 
+to a corresponding witness that [satisfies](#satisfaction) _r_ for `T`
+is inferred 
+from the set of implementations eligible to be the witness for _r_
+in the scope in which `T` adopts `P`.
+A declaration 
+cannot affirmatively be designated 
+as expressly being _the_ witness 
+for a requirement. 
+
+
 
 A declaration that `T` conforms to `P` further constitutes, with respect to each protocol `O`*<sub>i</sub>* which 
 `P` refines, a declaration that `T` conforms to `O`*<sub>i</sub>*.  Thus, for the declaration of `T: P` to be 
@@ -714,97 +1037,122 @@ exists of `T: P`.  This rule holds true even where competing declarations are co
 In a given scope, a type can conform to a protocol in only one way.
 
 
-#### Requirements
+#### Selection of Witness from Multiple Eligible Implementations
 
-A **protocol requirement** *m* is a statement in the declaration of a protocol that a type declared to conform 
-to the protocol must have a member satisfying *m*.
-
-If one protocol refines another protocol, the requirements of the latter are not part of the requirements of 
-the former.  The requirements of a protocol are not overridden by a protocol that refines the protocol.  Thus, 
-the conformances formed by a refining protocol do not include witnesses for requirements of the refined protocol.
-
-#### Implementations
-
-Given `T: P` and a protocol requirement *m* of `P`, an **implementation** of *m* is any member of `T` that satisfies 
-*m*.  A type may have more than one implementation of a requirement.
-
-#### Witness
-
-Given `T: P` and a protocol requirement *m* of `P`, the **witness** for *m* is the implementation used to perform 
-*m*.  One and only one of `T`'s implementations of *m* will be the witness for *m*.
-
-An implementation is not *declared* to be a witness.  The identity of the witness for a requirement is inferred 
-from the entirety of the scope, including all declarations made within the scope and those imported into the scope.  
-
-Given `T: P` and a protocol requirement *m* of `P`, the witness for *m*  is the **most specialized** implementations 
-of *m* on `T`, as determined in the scope in which the declaration `T: P` is stated.  If `T` has only one implementation 
-of *m*, that implementation will be the protocol witness.  If `T` has more than one implementation of *m*, the most 
-specialized of those implementations will be the protocol witness.
+<p class="draft item"> </p>
+Given `T: P` and a requirement _r_ of `P`, 
+the witness for _r_ of `T: P` is the **most specialized** implementation
+among the eligible implementations for _r_ of `T: P`,
+as determined in the scope in which `T` adopts `P`.
 
 #### Most Specialized Implementation
-Among a type's implementations of a protocol requirement, the most specialized implementation will serve as the 
-witness for the requirement.  If only one implementation of a requirement is present, that implementation is the 
-most specialized.
+Among a type's implementations of a requirement, 
+the most specialized implementation 
+will serve as the witness for the requirement.
 
-If two implementations of a requirement are visible, the rules stated in this Section 1.5 determine which is the 
-most specialized.  If more than two implementations of a requirement are visible, the implementations are paired 
-and compared iteratively using these rules until the most specialized implementation is determined.
+<p class="draft item"> </p>
+If two implementations of a requirement 
+are eligible to be the witness for the requirement, 
+the rules stated in this subsection 
+determine which implementation is the most specialized and
+thus is the witness for the requirement.
+If more than two implementations of a requirement are eligible, 
+the implementations are paired and compared iteratively, 
+using these rules until the most specialized implementation is determined.
 
-The relative specialization between two implementations of a requirement is determined as follows:
 
-##### Implementations on Protocol and Conforming Type
-*Subject to the limitation stated in Section 1.5.4*, if one implementation is declared in an extension of a protocol 
-and another implementation is declared on a conforming type (whether in its declaration and/or an extension), the latter 
-implementation is more specialized.
+<p class="draft item"> </p>
+Where `T` adopts `P`, 
+_r_ is a requirment of `P`, and 
+_i1_ and _i2_ both are eligible implementations for _r_ of `T: P`,
+_i1_ will not be the witness for _r_ of `T: P` 
+if any of the followng conditions exist:
 
----
+1. **special cases**:
+    1. **_i1_ constrained in generic context**: 
+type `T` is a [concretization](#concretization), 
+type `G` is the generic type from which `T` is formed, and 
+the declaration of _i1_ is more [constrained](#constrained) 
+than the declaration of the [adoption](#adoption) `P` on `G`; 
+    1. **_i1_ free operator func vs. _i2_ static/class operator method**:
+... ;
+    1. **_i1_ static/class method vs. _i2_ enum case with associated value(s)**:
+... ;
 
-Example 1.5.1 demonstrates this case.  For the requirement *m1* of conformance of `S: P`, `S` has two implementations: 
-*i1* declared in an extension of `P`, and *i2* declared in the declaration of `S`.  Accordingly, *i2* is the more 
-specialized, and is the witness for *m1* of `S: P`.  
+1. **_i1_ on protocol vs. _i2_ on type**: 
+_i1_ is declared in an [extension of a protocol](#extension) 
+(whether `P` or another protocol adopted by `T`) and 
+_i2_ is declared on `T` or a superclass of `T` 
+(whether in the type's declaration or an extension of the type);
+
+1. **declared on a protocol vs. refinement of the protocol**:
+_i1_ is declared in an extension of `P` and 
+_i2_ is declared in an extension of a protocol that refines `P`; and
+
+1. **both declared on same type or protocol with differing constraints**:
+_i1_ and _i2_ are both declared 
+on the same protocol or on the same concrete type 
+and the declaration of _i1_ 
+is less constrained than 
+the declaration of _i2_.
+
+Where none of the preceding cases apply, it is ambiguous 
+whether _i1_ will be the witness for _r_ of `T: P`. The cases in which 
+ambiguity results, include, for example:
+- _i1_ is declared in an extension of one protocol,
+_i2_ is delcared in an extension of another protocol, and
+neither protocol refines the other protocol;
+- _i1_ and _i2_ are both declared on the same type or the same protocol
+with disjoint conditions;
+- ...
+
+<p class="draft item"> </p>
+The following example demonstrates conditon 2: the case where 
+one implementation is declared in an extension of a protocol 
+and another implementation is declared on the adopting type.
+For the requirement _r_ of `S: P`, 
+`S` has two eligible implementations: 
+_i1_ declared in an extension of `P`, and 
+_i2_ declared in the declaration of `S`.
+Thus, _i1_ cannot be the witness, 
+so _i2_ is the witness for *r* of `S: P`.  
 
 ```swift
-// EXAMPLE 1.5.1
 protocol P { 
-  var id: String { get } // (m1)
+  var id: String { get } // (r)
 }
 extension P { 
   var id: String { "P" } // (i1)
 } 
 
 struct S {
-  var id: String { "S" } // (i2)
+  var id: String { "S" } // (i2)  <<< witness
 }
 extension S: P {}
 ```
 
-##### Implementations on Two Different Protocols 
-*Subject to the limitation stated in Section 1.5.4*, if one implementation is declared in an extension of one protocol 
-and another implementation is declared in an extension of another protocol, then:
-
-(i) if one protocol refines the other protocol, the implementation declared in an extension of the more refined 
-protocol is the more specialized; and  
-
-(ii) otherwise, it is ambiguous which implementation is the more specialized.
-
----
-
-Example 1.5.2 demonstrates that an implementation on a protocol is considered more specialized than an implementation 
-on a protocol that is refined by the first protocol and that the same holds true even if the implementation on the 
-less-refined protocol is more constrained than the implementation on the more-refined protocol.
-
-The conformance of `S: P` has two implementations of the requirement *m1* of protocol `P`:  implementation *i1* declared 
-in an extension of `P`, and implementation *i2* declared in an extension of protocol `Q`.  Since `Q` refines `P`, *i2* 
-is more specialized than *i1*.  Thus, *i2* is the witness for *m1* of `S: P`.  When *m1* of `S: P` is accessed at *a1* 
-(or anywhere else), *i2* is the witness, and serves as the implementation of *m1*.     
+<p class="draft item"> </p>
+The following example demonstrates condition 3: the case where
+one implementation is declared on a protocol and 
+a second implementation is declated on a protocol that 
+is refined by the first protocol. 
+`S: P` has two eligible implementations 
+of the requirement _r_ of protocol `P`.
+Implementation _i1_ is declared in an extension of `P`, and 
+implementation _i2_ declared in an extension of protocol `Q`. 
+Since `Q` refines `P`, *i1* will not be the witness.
+Thus, _i2_ is the witness for _r_ of `S: P`.
+This result holds true even if 
+the implementation on the less-refined protocol 
+is more constrained than 
+the implementation on the more-refined protocol.
 
 ```swift
-// Example 1.5.2
 protocol P {
-  var id: String { get } // (m1)
-  associatedtype V // (m2)
+  var id: String { get } // (r)
+  associatedtype V
 }
-extension P where V: Numeric { // (c1)
+extension P where V: Numeric { // constrained
   var id: String { "P" } // (i1)
 }
 
@@ -814,7 +1162,7 @@ extension Q {  // unconstrained
 }
 
 func getId<T: P>(of t: T) -> String {
-  t.id // (a1)
+  t.id
 }
 
 struct S {
@@ -1013,24 +1361,63 @@ to Equatable, Hashable and Comparable]
 
 ### Temporary Link Targets
 ---
-To grammar in other chapters:
+Links to be revised to instead point to grammar in other chapters:
 <ul>
   <li id="identifier">identifier</li>
-  <li id="#type">type</li> 
+  <li id="type">type</li> 
   <li id="attributes">attributes</li>  
   <li id="access-level-modifier">access-level-modifier</li>
   <li id="type-identifier">type-identifier</li>
-  <li id="#generic-where-clause">generic-where-clause</li>
-  <li id="#compiler-control-statement">compiler-control-statement</li>
-  <li id="#typealias-name">typealias-name</li>
-  <li id="#declaration-modifiers">declaration-modifiers</li>
-  <li href="#generic-parameter-clause">generic-parameter-clause</li>
-  <li href="#subscript-head">subscript-head</li>
-  <li href="#subscript-result">subscript-result</li>
-  <li href="#function-head">function-head</li>
-  <li href="#initializer-head">initializer-head</li>
-  <li href="#getter-setter-keyword-block">parameter-clause</li>
+  <li id="generic-where-clause">generic-where-clause</li>
+  <li id="compiler-control-statement">compiler-control-statement</li>
+  <li id="typealias-name">typealias-name</li>
+  <li id="declaration-modifiers">declaration-modifiers</li>
+  <li id="parameter-clause">parameter-clause</li>
+  <li id="generic-parameter-clause">generic-parameter-clause</li>
+  <li id="subscript-head">subscript-head</li>
+  <li id="subscript-result">subscript-result</li>
+  <li id="function-head">function-head</li>
+  <li id="function-name">function-name</li>
+  <li id="function-signature">function-signature</li>
+  <li id="initializer-head">initializer-head</li>
+  <li id="getter-setter-keyword-block">parameter-clause</li>
+  <li id="constant-declaration">constant-declaration</li>
+  <li id="variable-declaration">variable-declaration</li>
+  <li id="typealias-name">typealias-name</li>
+  <li id="union-value-style-enum-case">union-value-style-enum-case</li>
+  <li id="tuple-type">tuple-type</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
 </ul>
+
+Links to be revised to instead point to concepts in other chapters:
+<ul>
+  <li id="associated values">associated values</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+  <li id="xxx">xxx</li>
+</ul>
+
+Link to concept to be included in generics chapter:
+
+<a id="concretization"></a>
+>***Concretization of a Generic Type**
+>A concretization of a generic type 
+is a specialized version of the generic type 
+formed by replacing the generic type's type parameters 
+with concrete type arguments.  A generic type may specify that 
+its concretizations will adopt, or conditionally may adopt, 
+one or more protocols, 
+which establishes a pattern for protocol adoption.
+When a concretization is formed, 
+its protocol conformances are determined by that pattern.*
 
 
 <head>
@@ -1040,26 +1427,44 @@ To grammar in other chapters:
   this style sheet will be discarded. 
   -->
   <style type="text/css">
+    /* provide for better vertical spacing (around paragrpahs) */
     p {
       margin-block-start: 1em;
       margin-block-end: auto;
     }
+    /* provide for better vertical spacing (above lists) */
     ul {
       margin-block-start: 0em;
       margin-block-end: 0em;
     }
+    /* provide for better vertical spacing (above list items) */
     li {
       margin-top: 0.5em;
     }
+    /* provide for better vertical spacing (above headers) */
+    h3, h4, h5, h6 {
+      margin-top: 1em;
+    }
+    /* provide for better vertical spacing (above code block) */
+    .language-swift {
+      margin-top: 1.0em;
+    }
+
+    /* adjustment to get numbering to align correctly */
     .item {
       height: 0.3em;
     }
+
+    /* overall widening */
     .wrapper {
       width: 1060px;
     }
+    /* widening the text */
     section {
       width: 700px;
     }
+
+    /* adjusting font sizes of headers */
     h2 {
       font-size: 2.0em;
     }
@@ -1074,9 +1479,9 @@ To grammar in other chapters:
     }
     h6 {
       font-size: 1.0em;
-    }h3, h4, h5, h6 {
-      margin-top: 1em;
     }
+
+    /* visually distinguish between finalled text vs. draft text */
     .draft.item {
       color: red;
     }
@@ -1084,6 +1489,8 @@ To grammar in other chapters:
       content: "" counter(item);
       counter-increment: item;
     }
+
+    /* a styled note */
     .note {
       margin-left: 20px;
       font-style: italic;
@@ -1092,6 +1499,8 @@ To grammar in other chapters:
     .note:before {
       content: "Note: ";
     }
+
+    /* a styled comment */
     .comment {
       margin-left: 20px;
       font-style: italic;
@@ -1100,13 +1509,11 @@ To grammar in other chapters:
     .comment:before {
       content: "Comment: ";
     }
+
+    /* reduce size of inline code */
     p>code {
       font-size: 1.0em;
     }
-    .language-swift {
-      margin-top: 1.0em;
-    }
-
   </style>
 </head>
 
