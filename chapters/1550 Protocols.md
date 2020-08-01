@@ -144,7 +144,8 @@ There are five types of protocol requirements:
 [note the concept of a requirement being a customization point]
 
 <p class="draft item"> </p>
-[applicbale attributes] [attributes are part of requierment's specification, not a modification of the declaration]
+[applicbale attributes] [attributes are part of requierment's specification,
+not a modification of the declaration]
 
 <p class="draft item"> </p>
 [access level modifiers]
@@ -156,9 +157,6 @@ There are five types of protocol requirements:
 A **protocol requirement** *m* is a statement in the declaration of a protocol that a type declared to conform 
 to the protocol must have a member satisfying *m*.
 
-If one protocol refines another protocol, the requirements of the latter are not part of the requirements of 
-the former.  The requirements of a protocol are not overridden by a protocol that refines the protocol.  Thus, 
-the conformances formed by a refining protocol do not include witnesses for requirements of the refined protocol.
 
 #### Associated Type Requirement
 
@@ -615,8 +613,6 @@ protocol Q: P {} // Q refines both P and O
 <p class="draft item"> </p>
 Where a protocol `P` refines another protocol `O`, the members of `O` are 
 accessible in the declaration and extensions of `P`.
-<p class="note">A member of a protocol refined by another protcol does 
-not become a member of the latter protocol.</p>
 
 ```swift
 protocol O { 
@@ -633,6 +629,14 @@ extension P {
 }
 ```
 
+<p class="note"> </p>
+A member of a protocol `O` refined by a protcol `P` 
+does not become a member of protocol `O`.
+Thus, the set of requirements of `O` 
+are not part of set of requirements of `P`.
+Nevertheless, in order for a type to adopt `P`,
+the type must satisfy the requirements of `O`.
+
 <p class="draft item"> </p>
 Where a protocol `P` refines another protocol `O`, `P` is not able to declare a
 member of itself that is the same as a member of `O`.  If `P` attempts to 
@@ -647,30 +651,6 @@ to ___.</p>
 
 <p class="note">The standard library utilizes the <code>@nonoverride</code> 
 attribute to ___.</p>
-
-<p class="draft item"> </p>
-... to be continued ...
-
-
-### Composition
----
-
-This section concerns the composition of protocols.
-
-<p class="draft item"> </p>
-... to be continued ...
-
-### Class-Only Protocols
----
-This section concerns protocols capable of adoption only by class types.
-
-<p class="draft item"> </p>
-... to be continued ...
-
-
-### Objective-C Protocols
----
-This section concerns protocol interoperation with Objective-C.
 
 <p class="draft item"> </p>
 ... to be continued ...
@@ -698,8 +678,15 @@ otherise the program is ill-formed.
 
 <p class="draft item"> </p>
 Where a generic type `X` 
-is declared to adopt a protocol `P`, 
+is declared to unconditionally adopt a protocol `P`, 
 a concretization of `X` 
+adopts `P`. 
+
+<p class="draft item"> </p>
+Where a generic type `X` 
+is declared to conditionally adopt a protocol `P`, 
+a concretization of `X` 
+that satisfies the condition
 adopts `P`. 
 
 <p class="draft item"> </p>
@@ -709,15 +696,15 @@ may unconditionally adopt `P` by including a `: P`
 or in any extension of `T`.
 
 ```swift
-protocol P { var a: Int { get } } // requirement M
+protocol P { var a: Int { get } } // requirement r
 
-struct S: P { var a: Int { 42 } } // M satisfied; adoption declared
+struct S: P { var a: Int { 42 } } // r satisfied; adoption declared
 
-class C { let a: Int } // M satisfied
+class C { let a: Int } // r satisfied
 extension C: P {} // adoption declared
 
 enum E {}
-extension E: P { var a: Int { 42 } } // M satisfied; adoption declared
+extension E: P { var a: Int { 42 } } // r satisfied; adoption declared
 ```
 
 <p class="draft item"> </p>
@@ -725,7 +712,7 @@ Where type `T` [satisfies](#conformance) the requirements of protocol `P`,
 `T` may conditionally adopt `P` by including a `: P` 
 [type  inheritance clause](#type-inheritance-clause) and a 
 [generic where clause](#generic-where-clause) in the declaration of `T` or in 
-any extension of `T`.
+any extension of `T`.  
 
 ```swift
 protocol P {}
@@ -735,39 +722,41 @@ extension S: P where T: Numeric {}
 ```
 
 <p class="draft item"> </p>
-Where a protocol `P` refines a protocol `O` and type `T` is declared to adopt 
-`P`, for the adoption of `P` to be valid, `T` must [satisfy](#conformance) 
-the requirements of both `P` and `O`.
+Where a protocol `P` [refines](#refinement) a protocol `O` and 
+type `T` is declared to adopt `P`, 
+`T` must [satisfy](#conformance) 
+the requirements of both `P` and `O`,
+otherwise the program is ill-formed.
 
 ```swift
-protocol O { var a: Int { get } } // requirement M
+protocol O { var a: Int { get } } // requirement r
 
 protocol P: O {}
 
-struct S {} // M not satisfied
+struct S {} // r not satisfied
 extension S: P {} // error: struct S does not conform to protocol O
 ```
 
 <p class="draft item"> </p>
-Where a protocol `P` refines a protocol `O`, a type `T` 
-[satisfies](#conformance) the requirements of `O` and `P`, and `T` 
-unconditionally is declared to adopt `P`, `T` implicilty adopts `O` 
-unconditionally.
+Where a protocol `P` [refines](#refinement) a protocol `O`, 
+a type `T` [satisfies](#conformance) the requirements of `O` and `P`, and 
+`T` unconditionally is declared to adopt `P`, 
+`T` implicilty adopts `O` unconditionally.
 
 ```swift
-protocol O { var a: Int { get } } // requirement M
+protocol O { var a: Int { get } } // requirement r
 
 protocol P: O {}
 
-struct S { var a: Int { 1 } } // M satisfied
+struct S { var a: Int { 1 } } // r satisfied
 extension S: P {} // adoption of P declared; adoption of O implied
 ```
 
 <p class="draft item"> </p>
 Where a protocol `P` refines a protocol `O`, type `T` [satisfies](#conformance) 
 the requirements of `O` and `P`, and `T` declares adoption of 
-`P` subject to conditions *C*, `T` also must delcare adoption of `O` 
-subject to conditions that are a superset of *C*, otherwise the program is
+`P` subject to conditions _c_, `T` also must delcare adoption of `O` 
+subject to conditions that are a superset of _c_, otherwise the program is
 ill-formed.
 
 ```swift
@@ -819,6 +808,23 @@ var a: [(Int, String)] = [(2, "two"), (1, "one")]
 print(a.sorted()) // "(1, "one"), (2, "two")"
 ```
 
+<p class="draft item"> </p>
+Where two express declarations of
+a type `T` adopting a protocol `P`
+exist in the same scope,
+the program is ill-formed.
+This prohibition on multiple express declarations of adoption
+holds true even where competing declarations 
+are conditional with disjoint conditions. 
+
+<p class="draft item"> </p>
+Where a protocol `P` refines a protocol `O` and
+a type `T` expressly declares adoption of `P`,
+`T` also may expressly declare adoption of `O`
+so long as the condition on the adoption of `O`
+is a superset of the condition on the adoption of `P`.
+
+
 ### Conformance
 ---
 
@@ -840,6 +846,12 @@ onto a corresponding **witness** that satisfies _r_ for `T`.
 
 This section describes how a conformance's mapping from requirements to 
 witnesses is determined.
+
+<p class="draft item"> </p>
+In a given scope, 
+a type can conform to a protocol in only one way
+(i.e., one and only one conformance exists for an adoption).
+
 
 #### Witness
 
@@ -888,7 +900,6 @@ Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and
 there exists more than one implemenation of _r_ eligible to be the witness 
 for _r_, the implementation that is the witness for _r_
 is determined according to the criteria in _________.
-
 
 
 
@@ -959,21 +970,6 @@ name of the `associatedtype` as the type in a:
 
 
 
-
-
-a return type, a parameter type or generic-parameter-type
-
-inferred to satisfy the `associatedtype` requirement by virtue of `T`'s
-witness for another requirement of `P`, 
-type of a return type, a parameter type or generic-parameter-type
-
-used in 
-
-
-
-
-
-
 #### Satisfaction of Requirements
 
 <p class="draft item"> </p>
@@ -1025,17 +1021,28 @@ cannot affirmatively be designated
 as expressly being _the_ witness 
 for a requirement. 
 
+<p class="draft item"> </p> 
+Where a type `T` adopts a protocol `P` and 
+`P` refines a protocol `O`,
+a conformance is created for both `X: P` and `X: O`.
+The requirements of `O` are assigned witnesses
+as part of the `X: O` conformance, and
+the requirements of `P` are assgined witnesses
+as part of the `X: P` conformance.
 
+```swift
+protocol O { var a: Int { getter } } // r1
 
-A declaration that `T` conforms to `P` further constitutes, with respect to each protocol `O`*<sub>i</sub>* which 
-`P` refines, a declaration that `T` conforms to `O`*<sub>i</sub>*.  Thus, for the declaration of `T: P` to be 
-valid, the implicit declarations of each `T: O`*<sub>i</sub>* must be valid.  For each conformance `T: O`*<sub>i</sub>*, 
-a distinct set of protocol witnesses is established. 
+protocol P { var b : String { getter } } // r2
 
-A type `T` cannot be declared to conform to a protocol `P` if, within the visible scope, another declaration 
-exists of `T: P`.  This rule holds true even where competing declarations are conditional with disjoint conditions.  
-In a given scope, a type can conform to a protocol in only one way.
+struct S: P {
+    var a: Int { 1 }  // witness for r1,
+                      // which is part of conformance for X: O
 
+    var b: String { "2" } // witness for r2,
+                          // which is part of conformance for X: P
+}
+```
 
 #### Selection of Witness from Multiple Eligible Implementations
 
@@ -1107,7 +1114,7 @@ with disjoint conditions; **[is this even possible???]**
 - ...
 
 <p class="draft item"> </p>
-The following example demonstrates conditon 2: the case where 
+The following example demonstrates condition 2: the case where 
 one implementation is declared in an extension of a protocol 
 and another implementation is declared on the adopting type.
 For the requirement _r_ of `S: P`, 
@@ -1333,9 +1340,27 @@ to Equatable, Hashable and Comparable]
 <p class="draft item"> </p>
 [... synth of allCases where CaseIterable present]
 
+### Composition
+---
 
+This section concerns the composition of protocols.
 
+<p class="draft item"> </p>
+... to be continued ...
 
+### Class-Only Protocols
+---
+This section concerns protocols capable of adoption only by class types.
+
+<p class="draft item"> </p>
+... to be continued ...
+
+### Objective-C Protocols
+---
+This section concerns protocol interoperation with Objective-C.
+
+<p class="draft item"> </p>
+... to be continued ...
 
 ### References
 ---
