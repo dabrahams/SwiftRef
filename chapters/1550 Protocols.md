@@ -1070,14 +1070,15 @@ using these rules until the most specialized implementation is determined.
 
 <p class="draft item"> </p>
 Where `T` adopts `P`, 
-_r_ is a requirment of `P`, and 
-_i1_ and _i2_ both are eligible implementations for _r_ of `T: P`,
-_i1_ will not be the witness for _r_ of `T: P` 
-if any of the followng conditions exist, 
-which are referred to in this subsection 
-by the numbering used, in the paragraph.
-The numbering and captions used in this paragraph are arbitrary, 
-and do not have any meaning outside this subsection.
+_r_ is a requirment of `P`, 
+_i1_ and _i2_ both are visbile 
+in the scope in which `T` adopts `P` and
+both satisfy _r_,
+_i1_ 
+is not the most specialized implementation for, and
+will not be the witness for,
+_r_ of `T: P` 
+if any of the followng conditions exist:
 
 1. **special cases**:
     1. **_i1_ constrained in generic context**: 
@@ -1107,16 +1108,22 @@ and the declaration of _i1_
 is less constrained than 
 the declaration of _i2_.
 
+The conditions, above, are referred to in this subsection 
+by the numbering used, above.
+The numbering and captions used in this paragraph are arbitrary, 
+and do not have any meaning outside this subsection.
+
+<p class="draft item"> </p>
 Where none of the preceding cases apply, it is ambiguous 
 whether _i1_ will be the witness for _r_ of `T: P`. The cases in which 
 ambiguity results, include, for example:
 - _i1_ is declared in an extension of one protocol,
 _i2_ is delcared in an extension of another protocol, and
 neither protocol refines the other protocol;
-- _i1_ and _i2_ are both declared on the same type or the same protocol
-with disjoint conditions; **[is this even possible???]**
-- ...
-
+- _i1_ and _i2_ are both declared 
+in an extension of the same protocol
+with disjoint conditions;
+- **[what others exist?]**
 
 <p class="draft item"> </p>
 Condition 1.1 is due to 
@@ -1138,6 +1145,28 @@ by a given concretization of `T`
 and thus 
 _i_ is a member of the concretization,
 _i_ remains ineligible to be a witness for _r_.
+
+<p class="draft item"> </p>
+With reference to condition 4,
+a declaration is less constrained
+than another declaration 
+where the former declaration
+is not subject to a generic-where-condition
+and the latter declaration
+is subject to a generic-where-condition 
+that is not always true
+or
+where the former declaration
+is subject to a generic-where-condition
+and the latter declaration
+is subject to a generic-where-condition 
+that is a subset of the former generic-where-condition.
+If one declaration 
+is subject to a generic-where-condition
+and another declaration
+is subject to a different generic-where-condition
+and the two generic-where-conditions are disjoint,
+it is not possible to determine which is less constrained.
 
 <p class="draft item"> </p>
 The following example demonstrates condition 1.1: the case where,
@@ -1205,6 +1234,61 @@ let x = X<Int>()
 print(x.id) // (a2) "P_Numeric"
 print(getId(of: x)) // "P"
 ```
+
+<p class="draft item"> </p>
+The following example is a demonstration 
+of another aspect of condition 1.1.
+This example demonstrates that 
+a specialized implementation of a protocol's requirement, 
+provided by another protocol that refines the protocol, 
+can be unavailable to a conformance 
+of a concretization that adopts the protocol
+even though the concretization also adopts
+the refining protocol that provides the implementation.
+Since constraint *c1* on *i2* 
+is not a superset 
+of constraint *c2* on `X<Int>: P`, 
+*i2* cannot serve 
+as the witness for _r1_ of `X<Int>: P`. 
+
+```swift
+protocol P {
+  var id: String { get } // (r1)
+  associatedtype V // (r2)
+}
+extension P {
+  var id: String { "P" } // (i1)
+}
+
+protocol Q: P {}
+extension Q where V: Numeric { // (c1)
+  var id: String { "Q_Numeric" } // (i2)
+}
+
+func getId<T: Q>(of t: T) -> String {
+  t.id // (a1)
+}
+
+struct X<T> {
+  typealias V = T
+}
+extension X: P {} // (c2)
+extension X: Q {}
+
+let x = X<Int>()
+print(x.id) // (a2) "Q_Numeric"
+print(getId(of: x)) // "P"
+```
+
+<p class="draft item"> </p>
+Notwithstanding the general inability of concretizations 
+to take advantage of specialized implementations, 
+the `Collection` family of protocols in the Standard Library 
+uses a private attribute 
+to gain some access to specialized implementations 
+for concretizations of generic types 
+conforming to `BidirectionalCollection` and `RandomAccessCollection`.
+The private attribute is `@nonoverride`.
 
 <p class="draft item"> </p>
 The following example demonstrates condition 2: the case where 
@@ -1298,7 +1382,6 @@ _i2_ is more specialized.
 Thus, _i2_ is the witness for _r1_ of `S: P`.
 
 ```swift
-// Example 1.5.3
 protocol P {
   var id: String { get } // (r1)
   associatedtype V // (r2)
@@ -1317,47 +1400,6 @@ struct S: P { // The conformance for `S: P` is [r1:i2, r2:Int]
   typealias V = Int // (i4)
 }
 ```           
-
-<p class="draft item"> </p>
-Example 1.5.4.2 demonstrates that a specialized implementation of a protocol's requirement provided by a refinement 
-of the protocol can be unavailable to a conformance of a concretization to the protocol even though the concretization 
-conforms to the refinement.[^2] 
-[^2]: Notwithstanding the general inability of concretizations to take advantage of specialized implementations, the 
-`Collection` family of protocols in the Standard Library uses a private attribute to gain some access to specialized 
-implementations for concretizations of generic types conforming to `BidirectionalCollection` and `RandomAccessCollection`.
-
-Since constraint *c1* on *i2* is not a superset of constraint *c2* on `X<Int>: P`, *i2* is unavailable for purposes of 
-the conformance of `X<Int>: P`. 
-
-```swift
-/// Example 1.5.4.2
-protocol P {
-  var id: String { get } // (m1)
-  associatedtype V // (m2)
-}
-extension P {
-  var id: String { "P" } // (i1)
-}
-
-protocol Q: P {}
-extension Q where V: Numeric { // (c1)
-  var id: String { "Q_Numeric" } // (i2)
-}
-
-func getId<T: Q>(of t: T) -> String {
-  t.id // (a1)
-}
-
-struct X<T> {
-  typealias V = T
-}
-extension X: P {} // (c2)
-extension X: Q {}
-
-let x = X<Int>()
-print(x.id) // (a2) "Q_Numeric"
-print(getId(of: x)) // "P"
-```
 
 <p class="draft item"> </p>
 [... add [synthesized conforamce]
