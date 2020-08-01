@@ -15,7 +15,7 @@ of the protocol. Protocols may be declared in a hierarchy, with one protocol
 being a [refinement](#refinement) of another protocol.
 
 
-### Declaration
+### Declaration of Protocol
 ---
 <div class="admonition grammar">
   <p class="admonition-title">Grammar of a protocol declaration</p>
@@ -123,8 +123,102 @@ being a [refinement](#refinement) of another protocol.
 <p class="draft item"> </p>
 meaning of Self and self
 
+### Protocol Extension
+---
+This section concerns protocol extensions.
 
-### Requirements
+<div class="admonition grammar">
+  <p class="admonition-title">Grammar of a protocol extension declaration</p>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="extension-declaration">extension-declaration</span>
+      <span class="arrow"> → </span> 
+      <a href="#attributes">attributes</a><sub class="loosen">opt</sub>
+      <a href="#access-level-modifier">
+      access-level-modifier</a><sub class="loosen">opt</sub>
+      <code>static</code><sub>opt</sub>
+      <code>extension</code>
+      <a href="#protocol-name">type-identifier</a>
+      <a href="#generic-where-clause">
+      generic-where-clause</a><sub class="loosen">opt</sub>
+      <a href="#protocol-body">extension-body</a>
+    </p>
+  </div>
+  <div class="syntax-group">
+    <p class="syntax-def">
+      <span class="name" id="extension-body">extension-body</span>
+      <span class="arrow"> → </span>
+      <code>{</code>
+      <a href="#extension-members">extension-members</a><sub class="loosen">opt</sub>
+      <code>}</code>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="extension-members">extension-members</span>
+      <span class="arrow"> → </span>
+      <a href="#extension-member">extension-member</a>
+      <a href="#extension-members">extension-members</a><sub class="loosen">opt</sub>
+    </p>
+    <p class="syntax-def">
+      <span class="name" id="extension-member">extension-member</span>
+      <span class="arrow"> → </span>
+      <a href="#declaration">declaration</a>
+      |
+      <a href="#compiler-control-statement">compiler-control-statement</a><sub class="loosen">opt</sub>
+      <code>}</code>
+    </p>
+  </div>
+</div>
+
+<p class="draft item"> </p>
+A protocol extension serves two purposes:
+(1) the declaration of 
+default implementations 
+of protocol requirements; and
+(2) the declaration of arbitrary functionality.
+
+<p class="draft item"> </p>
+While a protocol extension 
+is referred to 
+as a "protocol extension," 
+it does not extend a protocol, and 
+so does not add requirements to a protocol.
+Rather, an extension of a protocol acts
+as an extension 
+of each nominal concrete type
+that adopts the protocol.
+
+<p class="draft item"> </p>
+A member of a protocol extension 
+is not a member of 
+the protocol with which the extension is associated.
+However, the members of 
+the protocol with which the extension is associated
+(i.e., the requirements of the protocol)
+are visible within the extension.
+
+<p class="draft item"> </p>
+[applicbale attributes]
+
+<p class="draft item"> </p>
+[access level modifiers]
+
+<p class="draft item"> </p>
+A [type inheritance clause](#type-inheritance-clause) 
+is not permitted
+as part of a protocol extension.
+
+<p class="draft item"> </p>
+The members of a protocol extension 
+are not 
+[protocol-members](#protcol-members).
+
+<p class="draft item"> </p>
+The `class` keyword 
+is not permitted on declarations 
+in a protocol extension.
+
+
+### Declaration of Protocol Requirements
 ---
 This section discusses each type of (protocol) requirement, how each is 
 declared, and the types of declarations that may satisfy each requirement.
@@ -534,15 +628,6 @@ known as an `init` requirement or an initializer requirement.
 <p class="draft item"> </p>
 [how is it declared]
 
-
-### Extension
----
-This section concerns the role played by extensions relative to protocols.
-
-<p class="draft item"> </p>
-A member of a protocol extension is not a member of the protocol with which the
-extension is associated.
-
 #### Default Implementations
 
 <p class="draft item"> </p>
@@ -856,27 +941,42 @@ a type can conform to a protocol in only one way
 #### Witness
 
 <p class="draft item"> </p>
-Where _r_ is a requirement of a protocol `P` and a type `T` adopts `P`, 
-the **witness** of _r_ for `T: P` is the property, method, function, enum case, 
-type, subscript or initializer that serves as `T`'s implementation of _r_.  
+Where _r_ is a requirement of a protocol `P` and 
+a type `T` adopts `P`, 
+the **witness** of _r_ for `T: P` 
+is 
+the property, method, function, enum case, type, subscript or initializer 
+that serves as 
+`T`'s implementation of _r_.  
 
 <p class="draft item"> </p>
-For a given requirement of a conformance, the identity of the witness for such
-requirement is immutable.
+For a given requirement of a conformance, 
+the identity of the witness for such requirement 
+is immutable.
 
 <p class="draft item"> </p>   
-Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and a 
-given property, method, enum case, type, subscript or initializer of
-`T` **satisfies** _r_, such property, method, enum case, type, 
-subscript or initializer is an implementation of _r_, and is eligible to be the
-witness for _r_.
+Where _r_ is a requirement of a protocol `P`, 
+a type `T` adopts `P`, and 
+a given 
+property, method, enum case, type, subscript or initializer of `T` 
+**satisfies** _r_, 
+such property, method, enum case, type, subscript or initializer 
+is an implementation of _r_, and 
+is eligible to be the witness for _r_.
 
 <p class="draft item"> </p> 
-Where _r_ is a `static func` requirement of a protocol `P`, the 
-[function-name](#function-name) of _r_ is an [operator](#operator), a type `T` 
-adopts `P`, and in the scope in which `T` adopts `P` there exists a concrete 
-module-scope operator function _f_ that **satisfies** _r_, _f_ is an 
-implementation of _r_, and is eligible to be the witness for _r_.
+Where _r_ 
+is a `static func` requirement 
+of a protocol `P`, 
+the [function-name](#function-name) of _r_ 
+is an [operator](#operator), 
+a type `T` adopts `P`, and 
+in the scope in which `T` adopts `P` 
+there exists a concrete module-scope operator function _f_ 
+that **satisfies** _r_, 
+_f_ is an implementation of _r_, and 
+is eligible to be 
+the witness for _r_.
 
 ```swift
 func <(lhs: G1, rhs: G1) -> G1 { G1() }
@@ -887,23 +987,46 @@ struct G1: G {}
 ```
 
 <p class="draft item"> </p> 
-Where _r_ is a requirement of a protocol `P`, and a type `T` adopts `P`, there
-may exist more then implemenation of _r_ eligible to be the witness for _r_.
+Where _r_ is a requirement of a protocol `P`, and 
+a type `T` adopts `P`, 
+there may exist more than one implemenation of _r_ 
+eligible to be the witness for _r_.
 
 <p class="draft item"> </p> 
-Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and
-there exists one and only one implemenation of _r_ eligible to be the witness 
-for _r_, such implementation is the witness for _r_.
+Where _r_ is a requirement of a protocol `P`, 
+a type `T` adopts `P`, and
+there exists 
+only one implemenation of _r_ 
+eligible to be the witness for _r_, 
+such implementation is the witness for _r_.
 
 <p class="draft item"> </p> 
-Where _r_ is a requirement of a protocol `P`, a type `T` adopts `P`, and
-there exists more than one implemenation of _r_ eligible to be the witness 
-for _r_, the implementation that is the witness for _r_
-is determined according to the criteria in _________.
+Where _r_ is a requirement of a protocol `P`, 
+a type `T` adopts `P`, and
+there exists more than one implemenation of _r_ 
+eligible to be the witness for _r_, 
+the implementation that is the witness for _r_
+is the [most specialized](#most-specialized) 
+of such implementations.
 
+<p class="draft item"> </p>
+Where a [memberwise initializer 
+is synthesized](#synthesized-initializer),
+the initializer can satisfy 
+a protocol initializer requirement.
 
+<p class="draft item"> </p>
+Where a type's conformance
+to the `Equatable`, `Hashable` or `Comparable` protocol 
+is [synthesized](https://docs.swift.org/swift-book/LanguageGuide/Protocols.html#ID627),
+the witnesses for the applicable requirements 
+are the synthesized members.
 
-
+<p class="draft item"> </p>
+Where a type's conformance to the `CaseIterable` protocol
+is [synthesized](https://docs.swift.org/swift-book/LanguageGuide/Enumerations.html#ID581), 
+the witness for the `allCases` property requirement 
+is the synthesized member.
 
 #### Visible
 
@@ -1030,6 +1153,9 @@ as part of the `X: O` conformance, and
 the requirements of `P` are assgined witnesses
 as part of the `X: P` conformance.
 
+
+
+
 ```swift
 protocol O { var a: Int { getter } } // r1
 
@@ -1044,18 +1170,30 @@ struct S: P {
 }
 ```
 
-#### Selection of Witness from Multiple Eligible Implementations
+#### Most Specialized
 
 <p class="draft item"> </p>
 Given `T: P` and a requirement _r_ of `P`, 
 the witness for _r_ of `T: P` is the **most specialized** implementation
-among the eligible implementations for _r_ of `T: P`,
+among the possible implementations for _r_ of `T: P`,
 as determined in the scope in which `T` adopts `P`.
 
-#### Most Specialized Implementation
-Among a type's implementations of a requirement, 
-the most specialized implementation 
-will serve as the witness for the requirement.
+<p class="draft item"> </p>
+Where only one possible implementation exists for a requirement,
+that possible implementation is the most specialized, and
+thus is the witness for the requirement.
+
+<p class="draft item"> </p>
+Where exactly two possible implementations exist for a requirement:
+If one of the possible implementations satsifies any one of
+[the Less-Specialized Conditions](#less-specialized-condtions) and
+the other possible implementation does not satisfy any of 
+the Less-Specialized Conditions,
+the latter implementation is more specialized than
+the former implementation, and
+thus is the witness for the requirement.
+
+
 
 <p class="draft item"> </p>
 If two implementations of a requirement 
@@ -1068,45 +1206,42 @@ the implementations are paired and compared iteratively,
 using these rules until the most specialized implementation is determined.
 
 
-<p class="draft item"> </p>
-Where `T` adopts `P`, 
-_r_ is a requirment of `P`, 
-_i1_ and _i2_ both are visbile 
-in the scope in which `T` adopts `P` and
-both satisfy _r_,
-_i1_ 
-is not the most specialized implementation for, and
-will not be the witness for,
-_r_ of `T: P` 
+<p class="draft item" id="less-specialized-condtions"> </p>
+The four conditions stated in this paragraph
+are referred to in this Conformance subsection
+as the **Less-Specialized Conditions**.
+Where a type `T` adopts a protocol `P`, 
+_r_ is a requirment of `P`, and
+_i1_ and _i2_ both satisfy _r_ and are visbile 
+in the scope in which `T` adopts `P`,
+_i1_ is not the most specialized implementation 
+for _r_ of `T: P` 
 if any of the followng conditions exist:
 
-1. **special cases**:
-    1. **_i1_ constrained in generic context**: 
-type `T` is a [concretization](#concretization), 
-type `G` is the generic type from which `T` is formed, and 
-the declaration of _i1_ is more [constrained](#constrained) 
-than the declaration of the [adoption](#adoption) `P` on `G`; 
-    2. **_i1_ free operator func vs. _i2_ static/class operator method**:
-... ;
-    3. **_i1_ static/class method vs. _i2_ enum case with associated value(s)**:
-... ;
-
-2. **_i1_ on protocol vs. _i2_ on type**: 
+1. **_i1_ declared on protocol while _i2_ declared on adopting type**: 
 _i1_ is declared in an [extension of a protocol](#extension) 
 (whether `P` or another protocol adopted by `T`) and 
 _i2_ is declared on `T` or a superclass of `T` 
 (whether in the type's declaration or an extension of the type);
 
-3. **declared on a protocol vs. refinement of the protocol**:
+2. **_i1_ declared on a protocol while _i2_ declared on refinement 
+of the protocol**:
 _i1_ is declared in an extension of `P` and 
 _i2_ is declared in an extension of a protocol that refines `P`; and
 
-4. **both declared on same type or protocol with differing constraints**:
+3. **_i1_ and _i2_ declared on same protocol with _i1_ less constrained**:
 _i1_ and _i2_ are both declared 
-on the same protocol or on the same concrete type 
+on the same protocol
 and the declaration of _i1_ 
 is less constrained than 
 the declaration of _i2_.
+
+4. **_i1_ declaration more constrained than 
+generic declaration of protocol adoption**: 
+type `T` is a [concretization](#concretization), 
+type `G` is the generic type from which `T` is formed, and 
+the declaration of _i1_ is more [constrained](#constrained) 
+than the declaration of the [adoption](#adoption) `P` on `G`; 
 
 The conditions, above, are referred to in this subsection 
 by the numbering used, above.
@@ -1121,12 +1256,29 @@ ambiguity results, include, for example:
 _i2_ is delcared in an extension of another protocol, and
 neither protocol refines the other protocol;
 - _i1_ and _i2_ are both declared 
-in an extension of the same protocol
-with disjoint conditions;
+in extensions of the same protocol
+with disjoint generic-where-conditions;
+- _r_ is an operator function requirement;
 - **[what others exist?]**
 
 <p class="draft item"> </p>
-Condition 1.1 is due to 
+Where a condition _c1_ 
+is a proper subset 
+of a condition _c2_ (i.e., _c1_ ⊂ _c2_),
+a declaration _d1_ subject to _c1_
+is more constrained than 
+a declaration _d2_ subject to _c2_.
+Declarations are constrained 
+by [generic-where-clauses](#generic-where-clause).
+Where a declaration is not subject to a generic-where-clause,
+it is unconstrained, and
+thus cannot be more constrained than another declaration.
+Where the conditions to two declarations are disjoint,
+it is indeterminate whether one declaration 
+is more constrained than the other declaration.
+
+<p class="draft item"> </p>
+Condition 4 is due to 
 a restriction existing 
 in the current implementation of Swift.
 Where a generic type `T` 
@@ -1147,29 +1299,118 @@ _i_ is a member of the concretization,
 _i_ remains ineligible to be a witness for _r_.
 
 <p class="draft item"> </p>
-With reference to condition 4,
-a declaration is less constrained
-than another declaration 
-where the former declaration
-is not subject to a generic-where-condition
-and the latter declaration
-is subject to a generic-where-condition 
-that is not always true
-or
-where the former declaration
-is subject to a generic-where-condition
-and the latter declaration
-is subject to a generic-where-condition 
-that is a subset of the former generic-where-condition.
-If one declaration 
-is subject to a generic-where-condition
-and another declaration
-is subject to a different generic-where-condition
-and the two generic-where-conditions are disjoint,
-it is not possible to determine which is less constrained.
+The following example demonstrates condition 1: the case where 
+one implementation is declared in an extension of a protocol 
+and another implementation is declared on the adopting type.
+For the requirement _r_ of `S: P`, 
+`S` has two eligible implementations: 
+_i1_ declared in an extension of `P`, and 
+_i2_ declared in the declaration of `S`.
+Thus, _i1_ cannot be the witness, 
+so _i2_ is the witness for *r* of `S: P`.  
+
+```swift
+protocol P { 
+  var id: String { get } // (r)
+}
+extension P { 
+  var id: String { "P" } // (i1)
+} 
+
+struct S {
+  var id: String { "S" } // (i2)  <<< witness
+}
+extension S: P {}
+```
 
 <p class="draft item"> </p>
-The following example demonstrates condition 1.1: the case where,
+The following example demonstrates condition 2: the case where
+one implementation is declared on a protocol and 
+a second implementation is declated on a protocol that 
+is refined by the first protocol. 
+`S: P` has two eligible implementations 
+of the requirement _r_ of protocol `P`.
+Implementation _i1_ is declared in an extension of `P`, and 
+implementation _i2_ declared in an extension of protocol `Q`. 
+Since `Q` refines `P`, *i1* will not be the witness.
+Thus, _i2_ is the witness for _r_ of `S: P`.
+This result holds true even if 
+the implementation on the less-refined protocol 
+is more constrained than 
+the implementation on the more-refined protocol.
+
+```swift
+protocol P {
+  var id: String { get } // (r)
+  associatedtype V
+}
+extension P where V: Numeric { // constrained
+  var id: String { "P" } // (i1)
+}
+
+protocol Q: P {} //
+extension Q {  // unconstrained
+  var id: String { "Q_Numeric" } // (i2)
+}
+
+func getId<T: P>(of t: T) -> String {
+  t.id
+}
+
+struct S {
+  typealias V = Int
+}
+extension S: P {}
+extension S: Q {}
+
+let s = S()
+print(s.id) // (a2) // "Q_Numeric"
+print(getId(of: s)) // "Q_Numeric"
+```
+
+<p class="draft item"> </p>
+The following example demonstrates condition 3: the case where
+two implementations 
+are declared on the same type.
+The conformance of `S: P` has two implementations 
+of the requirement _r1_ of protocol `P`, 
+implementations _i1_ and _i2_. 
+While the variable labelled _i3_ also would satisfy _m1_, 
+it is not present on `S`, 
+because the `P` extension on which it is declared 
+is an extension only of types that conform to `P` 
+with an implemention of _r2_ that conforms to protocol `StringProtocol`; 
+since `S`'s implementation of _r2_ is `Int`, 
+which does not conform to  `StringProtocol`, 
+the extension containing _i3_ does not extend `S`.
+As between the only two implementations of _r1_ available on `S`, 
+_i1_ and _i2_, both are declared on `P`.
+Since _i1_ is unconstrained and _i2_ is constrained,
+_i2_ is more specialized.
+Thus, _i2_ is the witness for _r1_ of `S: P`.
+
+```swift
+protocol P {
+  var id: String { get } // (r1)
+  associatedtype V // (r2)
+}
+extension P { 
+  var id: String { "O" } // (i1)
+}
+extension P where V: Numeric {
+ var id: String { "O_Numeric" } // (i2)
+}
+extension P where V: StringProtocol {
+  var id: String { "O_StringProtocol" } // (i3)
+}
+
+struct S: P { // The conformance for `S: P` is [r1:i2, r2:Int]
+  typealias V = Int // (i4)
+}
+```           
+
+<p class="draft item"> </p>
+The following example demonstrates condition 4: the case where,
 in a generic context,
 a constrained implementation of a protocol requirement
 is unavailable to be a witness for the requirement 
@@ -1237,7 +1478,7 @@ print(getId(of: x)) // "P"
 
 <p class="draft item"> </p>
 The following example is a demonstration 
-of another aspect of condition 1.1.
+of another aspect of condition 4.
 This example demonstrates that 
 a specialized implementation of a protocol's requirement, 
 provided by another protocol that refines the protocol, 
@@ -1289,128 +1530,6 @@ to gain some access to specialized implementations
 for concretizations of generic types 
 conforming to `BidirectionalCollection` and `RandomAccessCollection`.
 The private attribute is `@nonoverride`.
-
-<p class="draft item"> </p>
-The following example demonstrates condition 2: the case where 
-one implementation is declared in an extension of a protocol 
-and another implementation is declared on the adopting type.
-For the requirement _r_ of `S: P`, 
-`S` has two eligible implementations: 
-_i1_ declared in an extension of `P`, and 
-_i2_ declared in the declaration of `S`.
-Thus, _i1_ cannot be the witness, 
-so _i2_ is the witness for *r* of `S: P`.  
-
-```swift
-protocol P { 
-  var id: String { get } // (r)
-}
-extension P { 
-  var id: String { "P" } // (i1)
-} 
-
-struct S {
-  var id: String { "S" } // (i2)  <<< witness
-}
-extension S: P {}
-```
-
-<p class="draft item"> </p>
-The following example demonstrates condition 3: the case where
-one implementation is declared on a protocol and 
-a second implementation is declated on a protocol that 
-is refined by the first protocol. 
-`S: P` has two eligible implementations 
-of the requirement _r_ of protocol `P`.
-Implementation _i1_ is declared in an extension of `P`, and 
-implementation _i2_ declared in an extension of protocol `Q`. 
-Since `Q` refines `P`, *i1* will not be the witness.
-Thus, _i2_ is the witness for _r_ of `S: P`.
-This result holds true even if 
-the implementation on the less-refined protocol 
-is more constrained than 
-the implementation on the more-refined protocol.
-
-```swift
-protocol P {
-  var id: String { get } // (r)
-  associatedtype V
-}
-extension P where V: Numeric { // constrained
-  var id: String { "P" } // (i1)
-}
-
-protocol Q: P {} //
-extension Q {  // unconstrained
-  var id: String { "Q_Numeric" } // (i2)
-}
-
-func getId<T: P>(of t: T) -> String {
-  t.id
-}
-
-struct S {
-  typealias V = Int
-}
-extension S: P {}
-extension S: Q {}
-
-let s = S()
-print(s.id) // (a2) // "Q_Numeric"
-print(getId(of: s)) // "Q_Numeric"
-```
-
-<p class="draft item"> </p>
-The following example demonstrates condition 4: the case where
-two implementations 
-are declared on the same type.
-The conformance of `S: P` has two implementations 
-of the requirement _r1_ of protocol `P`, 
-implementations _i1_ and _i2_. 
-While the variable labelled _i3_ also would satisfy _m1_, 
-it is not present on `S`, 
-because the `P` extension on which it is declared 
-is an extension only of types that conform to `P` 
-with an implemention of _r2_ that conforms to protocol `StringProtocol`; 
-since `S`'s implementation of _r2_ is `Int`, 
-which does not conform to  `StringProtocol`, 
-the extension containing _i3_ does not extend `S`.
-As between the only two implementations of _r1_ available on `S`, 
-_i1_ and _i2_, both are declared on `P`.
-Since _i1_ is unconstrained and _i2_ is constrained,
-_i2_ is more specialized.
-Thus, _i2_ is the witness for _r1_ of `S: P`.
-
-```swift
-protocol P {
-  var id: String { get } // (r1)
-  associatedtype V // (r2)
-}
-extension P { 
-  var id: String { "O" } // (i1)
-}
-extension P where V: Numeric {
- var id: String { "O_Numeric" } // (i2)
-}
-extension P where V: StringProtocol {
-  var id: String { "O_StringProtocol" } // (i3)
-}
-
-struct S: P { // The conformance for `S: P` is [r1:i2, r2:Int]
-  typealias V = Int // (i4)
-}
-```           
-
-<p class="draft item"> </p>
-[... add [synthesized conforamce]
-(https://docs.swift.org/swift-book/LanguageGuide/Protocols.html#ID627) 
-to Equatable, Hashable and Comparable]
-
-<p class="draft item"> </p>
-[... add synthesized memberwise initializer being available as witness]
-
-<p class="draft item"> </p>
-[... synth of allCases where CaseIterable present]
 
 ### Composition
 ---
@@ -1491,7 +1610,7 @@ Links to be revised to instead point to grammar in other chapters:
 Links to be revised to instead point to concepts in other chapters:
 <ul>
   <li id="associated values">associated values</li>
-  <li id="xxx">xxx</li>
+  <li id="synthesized-initializer">synthesized memberwise initializer</li>
   <li id="xxx">xxx</li>
   <li id="xxx">xxx</li>
   <li id="xxx">xxx</li>
