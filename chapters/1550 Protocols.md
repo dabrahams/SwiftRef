@@ -1073,7 +1073,11 @@ Where `T` adopts `P`,
 _r_ is a requirment of `P`, and 
 _i1_ and _i2_ both are eligible implementations for _r_ of `T: P`,
 _i1_ will not be the witness for _r_ of `T: P` 
-if any of the followng conditions exist:
+if any of the followng conditions exist, 
+which are referred to in this subsection 
+by the numbering used, in the paragraph.
+The numbering and captions used in this paragraph are arbitrary, 
+and do not have any meaning outside this subsection.
 
 1. **special cases**:
     1. **_i1_ constrained in generic context**: 
@@ -1081,22 +1085,22 @@ type `T` is a [concretization](#concretization),
 type `G` is the generic type from which `T` is formed, and 
 the declaration of _i1_ is more [constrained](#constrained) 
 than the declaration of the [adoption](#adoption) `P` on `G`; 
-    1. **_i1_ free operator func vs. _i2_ static/class operator method**:
+    2. **_i1_ free operator func vs. _i2_ static/class operator method**:
 ... ;
-    1. **_i1_ static/class method vs. _i2_ enum case with associated value(s)**:
+    3. **_i1_ static/class method vs. _i2_ enum case with associated value(s)**:
 ... ;
 
-1. **_i1_ on protocol vs. _i2_ on type**: 
+2. **_i1_ on protocol vs. _i2_ on type**: 
 _i1_ is declared in an [extension of a protocol](#extension) 
 (whether `P` or another protocol adopted by `T`) and 
 _i2_ is declared on `T` or a superclass of `T` 
 (whether in the type's declaration or an extension of the type);
 
-1. **declared on a protocol vs. refinement of the protocol**:
+3. **declared on a protocol vs. refinement of the protocol**:
 _i1_ is declared in an extension of `P` and 
 _i2_ is declared in an extension of a protocol that refines `P`; and
 
-1. **both declared on same type or protocol with differing constraints**:
+4. **both declared on same type or protocol with differing constraints**:
 _i1_ and _i2_ are both declared 
 on the same protocol or on the same concrete type 
 and the declaration of _i1_ 
@@ -1112,6 +1116,95 @@ neither protocol refines the other protocol;
 - _i1_ and _i2_ are both declared on the same type or the same protocol
 with disjoint conditions; **[is this even possible???]**
 - ...
+
+
+<p class="draft item"> </p>
+Condition 1.1 is due to 
+a restriction existing 
+in the current implementation of Swift.
+Where a generic type `T` 
+adopts a protocol `P` 
+subject to condition _c1_, 
+a requirement _r_ is a member of `P`, and
+a member of `T` _i_
+that satisfies requirement _r_
+is conditionally declared 
+subject to condition _c2_,
+_i_ is eligible to be a witness for _r_
+if and only if 
+_c2_ is a superset of _c1_.
+Even where _c2_ is satisfied 
+by a given concretization of `T`
+and thus 
+_i_ is a member of the concretization,
+_i_ remains ineligible to be a witness for _r_.
+
+<p class="draft item"> </p>
+The following example demonstrates condition 1.1: the case where,
+in a generic context,
+a constrained implementation of a protocol requirement
+is unavailable to be a witness for the requirement 
+for the conformance of 
+the adoption by a concretization of the protocol
+even though 
+the concretization satisfies 
+the conditions constraining the implementation.
+The conformance of `X<Int>: P` 
+has two implementations of 
+the requirement _r1_ of protocol `P`, _i1_ and _i2_.
+The constraint _c2_ on _i2_ 
+limits the availability of _i2_ 
+to cases in which 
+requirement _r2_ 
+is performed by 
+a witness that conforms to protocol `Numeric`.
+Constraint _c2_ is satisfied by `X<Int>`, 
+because `Int`, which is `X<Int>`'s implementation of _r2_, 
+conforms to `Numeric`.
+Thus, _i2_ is available on `X<Int>`, 
+and when the `id` property is 
+accessed directly on `X<Int>` at _a2_, 
+the access is dispatched to _i2_; and 
+the value "P_Numeric" is returned.
+However, constraint _c2_ on the adoption `X<Int>: P` 
+is the universal set (i.e., the conformance is unconstrained).  
+Constraint _c2_ is not a superset of the universal set, _c3_.
+Consequently, per condition 1.1, 
+_i2_ cannot serve as a witness for _r1_ 
+in the conformance `X<Int>: P`, and 
+so _i1_, as the only implementation 
+of _r1_ available for purposes of `X<Int>: P`, 
+is the witness for _r1_.
+When the `id` property is accessed on `X<Int>: P` 
+at _a1_ (or anywhere else), 
+_r1_ is the witness, and 
+the access is dispatached to _r1_.
+
+```swift
+protocol P {
+  var id: String { get } // (r1)
+  associatedtype V // (r2)
+}
+extension P { // (c1)
+  var id: String { "P" } // (i1)
+}
+extension P where V: Numeric { // (c2)
+  var id: String { "P_Numeric" } // (i2)
+}
+
+func getId<T: P>(of t: T) -> String {
+  t.id // (a1)
+}
+
+struct X<T> {
+  typealias V = T
+}
+extension X: P {} // (c3)
+
+let x = X<Int>()
+print(x.id) // (a2) "P_Numeric"
+print(getId(of: x)) // "P"
+```
 
 <p class="draft item"> </p>
 The following example demonstrates condition 2: the case where 
@@ -1183,35 +1276,32 @@ print(s.id) // (a2) // "Q_Numeric"
 print(getId(of: s)) // "Q_Numeric"
 ```
 
-##### Implementations on Same Type 
-*Subject to the limitation stated in Section 1.5.4*, if two implementations are both declared on the same protocol 
-or the same concrete type, then:
+<p class="draft item"> </p>
+The following example demonstrates condition 4: the case where
+two implementations 
+are declared on the same type.
+The conformance of `S: P` has two implementations 
+of the requirement _r1_ of protocol `P`, 
+implementations _i1_ and _i2_. 
+While the variable labelled _i3_ also would satisfy _m1_, 
+it is not present on `S`, 
+because the `P` extension on which it is declared 
+is an extension only of types that conform to `P` 
+with an implemention of _r2_ that conforms to protocol `StringProtocol`; 
+since `S`'s implementation of _r2_ is `Int`, 
+which does not conform to  `StringProtocol`, 
+the extension containing _i3_ does not extend `S`.
+As between the only two implementations of _r1_ available on `S`, 
+_i1_ and _i2_, both are declared on `P`.
+Since _i1_ is unconstrained and _i2_ is constrained,
+_i2_ is more specialized.
+Thus, _i2_ is the witness for _r1_ of `S: P`.
 
-(i) if one implementation is more constrained than the other implementation, the more constrained implementation is 
-the more specialized implementation; and
-
-(ii) otherwise, it is ambiguous which implementation is the more specialized.
-
----
-
-Example 1.5.3 demonstrates the determination of the most specialized implementation among multiple implementations 
-declared on the same type.  
-
-The conformance of `S: P` has two implementations of the requirement *m1* of protocol `P`, implementations *i1* and 
-*i2*.  While the property labelled *i3* also would satisfy *m1*, it is not present on `S`, because the `P` extension 
-on which it is declared is an extension only of types that conform to `P` with an implemention of *m2* that conforms 
-to protocol `StringProtocol`; since `S`'s implementation of *m2* is `Int`, which does not conform to  `StringProtocol`, 
-the extension containing *i3* does not extend `S`.  
-
-As between the only two implementations available on `S`, *i1* and *i2*, both are declared on `P`.  Since *i1* is 
-unconstrained and *i2* is constrained, *i2* is more specialized.  Thus, *i2* is the witness for *m1* of `S: P`.  
-When *m1* of `S: P` is accessed at *a1* (or anywhere else), *i2* is the witness, and serves as the implementation of *m1*.      
- 
 ```swift
 // Example 1.5.3
 protocol P {
-  var id: String { get } // (m1)
-  associatedtype V // (m2)
+  var id: String { get } // (r1)
+  associatedtype V // (r2)
 }
 extension P { 
   var id: String { "O" } // (i1)
@@ -1223,72 +1313,12 @@ extension P where V: StringProtocol {
   var id: String { "O_StringProtocol" } // (i3)
 }
 
-func getId<T: P>(of t: T) -> String {
-  t.id // (a1) 
+struct S: P { // The conformance for `S: P` is [r1:i2, r2:Int]
+  typealias V = Int // (i4)
 }
-
-struct S: P {
-  typealias V = Int
-}
-
-let s = S()
-print(s.id) // (a2) // "O_Numeric"
-print(getId(of: s)) // "O_Numeric"
 ```           
 
-##### Implementations on Generics via Constrained Extensions
-If a concretization is declared to conform to a protocol and an implementation of a requirement of the protocol is 
-more constrained than the declaration of conformance, the implementation is unavailable to serve as a witness of the 
-conformance of the concretization to the protocol.  Given concretization `T`, the conformance `T: P`, requirement *m* 
-of `P`, and a constrained implementation *i* of *m*, if the constraint on *i* is not a superset of the constraint on 
-`T: P`, then *i* is unavailable for purposes of the conformance of `T: P`.  This unavailability persists regardless of 
-whether `T` satisfies the constraints on *i*.  Thus, even though *i* may be available on `T`, it is not available for 
-purposes of the conformance `T: P`.  
-
----
-
-Example 1.5.4.1 demonstrates that a constrained implementation can be unavailable to a protocol conformance on a 
-concretization even though the concretization satisfies the constraints on the implementation.  
-
-The conformance of `X<Int>: P` has two implementations of the requirement *m1* of protocol `P`, *i1* and *i2*.  The 
-constraint *c2* on *i2* limits the availability of *i2* to cases in which requirement *m2* is performed by a witness 
-that conforms to protocol `Numeric`.  Constraint *c2* is satisfied by `X<Int>`, because `Int`, which is `X<Int>`'s 
-implementation of *m2*, conforms to `Numeric`.  Thus, *i2* is available on `X<Int>`, and when the `id` property is 
-accessed directly on `X<Int>` as *a2*, *i2* is used; the value "P_Numeric" is returned.
-
-However, constraint *c3* on conformance `X<Int>: P` is the universal set (i.e., the conformance is unconstrained).  
-Constraint *c2* is not a superset of the universal set, *c3*.  Consequently, per the rule stated at the outset of this 
-Section 1.5.4,  *i2* is disregarded for purposes of the conformance `X<Int>: P`, and so *i1*, as the only implementation 
-of *m1* available for purposes of `X<Int>: P`, is the witness for *m1*.  When *m1* of `X<Int>: P` is accessed at *a1* 
-(or anywhere else), *i1* is the witness, and serves as the implementation of *m1*.  
-
-```swift
-/// Example 1.5.4.1
-protocol P {
-  var id: String { get } // (m1)
-  associatedtype V // (m2)
-}
-extension P { // (c1)
-  var id: String { "P" } // (i1)
-}
-extension P where V: Numeric { // (c2)
-  var id: String { "P_Numeric" } // (i2)
-}
-
-func getId<T: P>(of t: T) -> String {
-  t.id // (a1)
-}
-
-struct X<T> {
-  typealias V = T
-}
-extension X: P {} // (c3)
-
-let x = X<Int>()
-print(x.id) // (a2) "P_Numeric"
-print(getId(of: x)) // "P"
-```
----
+<p class="draft item"> </p>
 Example 1.5.4.2 demonstrates that a specialized implementation of a protocol's requirement provided by a refinement 
 of the protocol can be unavailable to a conformance of a concretization to the protocol even though the concretization 
 conforms to the refinement.[^2] 
