@@ -7,7 +7,7 @@ h2 {
     counter-reset: section;
 }
 h3 {
-    counter-reset: subsection;
+    counter-reset: subsection item;
 }
 h3:before {
     content: counter(section) ". ";
